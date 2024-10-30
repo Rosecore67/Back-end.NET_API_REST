@@ -21,7 +21,7 @@ namespace Dot.Net.WebApi.Domain
        public string CreationName { get; set; }
        public DateTime? CreationDate { get; set; }
        public string RevisionName { get; set; }
-       public DateTime? RevisionDate;
+       public DateTime? RevisionDate { get; set; }
        public string DealName { get; set; }
        public string DealType { get; set; }
        public string SourceListId { get; set; }
