@@ -1,7 +1,7 @@
 using Dot.Net.WebApi.Domain;
 using Microsoft.AspNetCore.Mvc;
-using P7CreateRestApi.Models.DTOs;
-using P7CreateRestApi.Repositories.Interface;
+using P7CreateRestApi.Models.DTOs.BidListDTOs;
+using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
@@ -9,18 +9,18 @@ namespace Dot.Net.WebApi.Controllers
     [Route("[controller]")]
     public class BidListController : ControllerBase
     {
-        private readonly IBidListRepository _bidListRepository;
+        private readonly IBidListService _bidListService;
 
-        public BidListController(IBidListRepository bidListRepository)
+        public BidListController(IBidListService bidListService)
         {
-            _bidListRepository = bidListRepository;
+            _bidListService = bidListService;
         }
 
         // GET: api/bidlist
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BidListDTO>>> GetAllBids()
         {
-            var bids = await _bidListRepository.GetAllAsync();
+            var bids = await _bidListService.GetAllBidsAsync();
             var bidDtos = bids.Select(bid => new BidListDTO
             {
                 BidListId = bid.BidListId,
@@ -39,20 +39,6 @@ namespace Dot.Net.WebApi.Controllers
             return Ok(bidDtos);
         }
 
-        /*
-        // POST: api/bidlist/validate
-        //[HttpGet]
-        //[Route("validate")]
-
-        [HttpPost("validate")]
-        public IActionResult Validate([FromBody] BidList bidList)
-        {
-            // TODO: check data valid and save to db, after saving return bid list
-            return Ok();
-        }
-
-        Redondant avec le GET qui lui aussi vérifie les données avant d'enregistrer
-        */
 
         // POST: api/bidlist/validate
         [HttpPost("validate")]
@@ -83,23 +69,17 @@ namespace Dot.Net.WebApi.Controllers
                 CreationDate = DateTime.Now
             };
 
-            await _bidListRepository.AddAsync(newBid);
+            await _bidListService.CreateBidAsync(newBid);
 
             return CreatedAtAction(nameof(GetAllBids), new { id = newBid.BidListId }, newBid);
         }
 
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
-        {
-            return Ok();
-        }
 
         // PUT: api/bidlist/update/{id}
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateBid(int id, [FromBody] BidListUpdateDTO bidUpdateDto)
         {
-            var existingBid = await _bidListRepository.GetByIdAsync(id);
+            var existingBid = await _bidListService.GetBidByIdAsync(id);
             if (existingBid == null) return NotFound();
 
             existingBid.Account = bidUpdateDto.Account;
@@ -109,19 +89,19 @@ namespace Dot.Net.WebApi.Controllers
             existingBid.Bid = bidUpdateDto.Bid;
             existingBid.Ask = bidUpdateDto.Ask;
 
-            await _bidListRepository.UpdateAsync(existingBid);
+            await _bidListService.UpdateBidAsync(id, existingBid);
 
-            return NoContent();
+            return Ok(existingBid);
         }
 
         // DELETE: api/bidlist/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBid(int id)
         {
-            var bid = await _bidListRepository.GetByIdAsync(id);
+            var bid = await _bidListService.GetBidByIdAsync(id);
             if (bid == null) return NotFound();
 
-            await _bidListRepository.DeleteAsync(bid);
+            await _bidListService.DeleteBidAsync(id);
             return NoContent();
         }
     }

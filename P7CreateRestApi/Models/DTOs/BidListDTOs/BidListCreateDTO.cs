@@ -1,4 +1,4 @@
-﻿namespace P7CreateRestApi.Models.DTOs
+﻿namespace P7CreateRestApi.Models.DTOs.BidListDTOs
 {
     public class BidListCreateDTO
     {

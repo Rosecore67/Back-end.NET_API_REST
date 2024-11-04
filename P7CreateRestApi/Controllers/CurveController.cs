@@ -23,13 +23,13 @@ namespace Dot.Net.WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [Route("validate")]
-        public IActionResult Validate([FromBody]CurvePoint curvePoint)
-        {
-            // TODO: check data valid and save to db, after saving return bid list
-            return Ok();
-        }
+        //[HttpGet]
+        //[Route("validate")]
+        //public IActionResult Validate([FromBody]CurvePoint curvePoint)
+        //{
+        //    // TODO: check data valid and save to db, after saving return bid list
+        //    return Ok();
+        //}
 
         [HttpGet]
         [Route("update/{id}")]
