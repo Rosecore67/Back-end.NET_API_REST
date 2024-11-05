@@ -1,58 +1,78 @@
 using Dot.Net.WebApi.Domain;
 using Microsoft.AspNetCore.Mvc;
+using P7CreateRestApi.Models.DTOs.CurveDTOs;
+using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CurveController : ControllerBase
     {
-        // TODO: Inject Curve Point service
+        private readonly ICurvePointService _curvePointService;
 
-        [HttpGet]
-        [Route("list")]
-        public IActionResult Home()
+        public CurveController(ICurvePointService curvePointService)
         {
-            return Ok();
+            _curvePointService = curvePointService;
         }
 
-        [HttpGet]
-        [Route("add")]
-        public IActionResult AddCurvePoint([FromBody]CurvePoint curvePoint)
+        [HttpGet("list")]
+        public async Task<IActionResult> GetAllCurvePoints()
         {
-            return Ok();
+            var curvePoints = await _curvePointService.GetAllCurvePointsAsync();
+            var curvePointDtos = curvePoints.Select(cp => new CurvePointDTO
+            {
+                Id = cp.Id,
+                CurveId = cp.CurveId,
+                AsOfDate = cp.AsOfDate,
+                Term = cp.Term,
+                CurvePointValue = cp.CurvePointValue,
+                CreationDate = cp.CreationDate
+            }).ToList();
+
+            return Ok(curvePointDtos);
         }
 
-        //[HttpGet]
-        //[Route("validate")]
-        //public IActionResult Validate([FromBody]CurvePoint curvePoint)
-        //{
-        //    // TODO: check data valid and save to db, after saving return bid list
-        //    return Ok();
-        //}
-
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
+        [HttpPost("add")]
+        public async Task<IActionResult> AddCurvePoint([FromBody] CurvePointCreateDTO curvePointCreateDto)
         {
-            // TODO: get CurvePoint by Id and to model then show to the form
-            return Ok();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var curvePoint = new CurvePoint
+            {
+                CurveId = curvePointCreateDto.CurveId,
+                AsOfDate = curvePointCreateDto.AsOfDate,
+                Term = curvePointCreateDto.Term,
+                CurvePointValue = curvePointCreateDto.CurvePointValue
+            };
+
+            var createdCurvePoint = await _curvePointService.CreateCurvePointAsync(curvePoint);
+            return CreatedAtAction(nameof(GetAllCurvePoints), new { id = createdCurvePoint.Id }, createdCurvePoint);
         }
 
-        [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateCurvePoint(int id, [FromBody] CurvePoint curvePoint)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateCurvePoint(int id, [FromBody] CurvePointUpdateDTO curvePointUpdateDto)
         {
-            // TODO: check required fields, if valid call service to update Curve and return Curve list
-            return Ok();
+            var existingCurvePoint = await _curvePointService.GetCurvePointByIdAsync(id);
+            if (existingCurvePoint == null) return NotFound();
+
+            existingCurvePoint.CurveId = curvePointUpdateDto.CurveId;
+            existingCurvePoint.AsOfDate = curvePointUpdateDto.AsOfDate;
+            existingCurvePoint.Term = curvePointUpdateDto.Term;
+            existingCurvePoint.CurvePointValue = curvePointUpdateDto.CurvePointValue;
+
+            await _curvePointService.UpdateCurvePointAsync(id, existingCurvePoint);
+            return Ok(existingCurvePoint);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteBid(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCurvePoint(int id)
         {
-            // TODO: Find Curve by Id and delete the Curve, return to Curve list
-            return Ok();
+            var curvePoint = await _curvePointService.GetCurvePointByIdAsync(id);
+            if (curvePoint == null) return NotFound();
+
+            await _curvePointService.DeleteCurvePointAsync(id);
+            return NoContent();
         }
     }
 }
