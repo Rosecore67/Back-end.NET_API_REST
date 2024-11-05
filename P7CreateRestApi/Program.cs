@@ -22,6 +22,7 @@ builder.Services.AddScoped<IBidListRepository, BidListRepository>();
 builder.Services.AddScoped<IBidListService, BidListService>();
 builder.Services.AddScoped<ICurvePointRepository, CurvePointRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IRuleNameRepository, RuleNameRepository>();
 builder.Services.AddScoped<ITradeRepository, TradeRepository>();
 
