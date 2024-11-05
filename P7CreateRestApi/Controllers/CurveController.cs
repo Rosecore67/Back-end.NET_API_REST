@@ -96,7 +96,7 @@ namespace Dot.Net.WebApi.Controllers
 
             await _curvePointService.UpdateCurvePointAsync(id, existingCurvePoint);
 
-            _logger.LogInformation("Updated bid with ID {CurveId} at {Time}", id, DateTime.UtcNow);
+            _logger.LogInformation("Updated curve with ID {CurveId} at {Time}", id, DateTime.UtcNow);
 
             return Ok(existingCurvePoint);
         }
@@ -105,12 +105,12 @@ namespace Dot.Net.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCurvePoint(int id)
         {
-            _logger.LogInformation("Received request to DELETE bid with ID {BidId} at {Time}", id, DateTime.UtcNow);
+            _logger.LogInformation("Received request to DELETE curve with ID {CurveId} at {Time}", id, DateTime.UtcNow);
 
             var curvePoint = await _curvePointService.GetCurvePointByIdAsync(id);
             if (curvePoint == null)
             {
-                _logger.LogWarning("Bid with ID {BidId} not found for deletion at {Time}", id, DateTime.UtcNow);
+                _logger.LogWarning("Curve with ID {CurveId} not found for deletion at {Time}", id, DateTime.UtcNow);
                 return NotFound();
             }
 
