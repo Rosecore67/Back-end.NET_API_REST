@@ -23,6 +23,7 @@ builder.Services.AddScoped<IBidListService, BidListService>();
 builder.Services.AddScoped<ICurvePointRepository, CurvePointRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRuleNameRepository, RuleNameRepository>();
+builder.Services.AddScoped<IRuleNameService, RuleNameService>();
 builder.Services.AddScoped<ITradeRepository, TradeRepository>();
 
 var app = builder.Build();
