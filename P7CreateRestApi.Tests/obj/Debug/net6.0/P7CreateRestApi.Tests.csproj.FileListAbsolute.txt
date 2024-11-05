@@ -149,3 +149,7 @@ C:\Users\gurdi\source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\obj\Debu
 C:\Users\gurdi\source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\obj\Debug\net6.0\P7CreateRestApi.Tests.pdb
 C:\Users\gurdi\source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\obj\Debug\net6.0\P7CreateRestApi.Tests.genruntimeconfig.cache
 C:\Users\gurdi\source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\obj\Debug\net6.0\ref\P7CreateRestApi.Tests.dll
+C:\Users\gurdi\source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\bin\Debug\net6.0\P7CreateRestApi.Tests.dll.config
+C:\Users\gurdi\source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\bin\Debug\net6.0\Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll
+C:\Users\gurdi\source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\bin\Debug\net6.0\Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll
+C:\Users\gurdi\source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\bin\Debug\net6.0\fr\Microsoft.Data.Tools.Schema.Sql.UnitTesting.resources.dll

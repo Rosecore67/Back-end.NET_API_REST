@@ -14,6 +14,8 @@
           "Moq": "4.20.72",
           "P7CreateRestApi": "1.0.0",
           "coverlet.collector": "3.2.0",
+          "Microsoft.Data.Tools.Schema.Sql.UnitTesting": "17.0.0.0",
+          "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter": "17.0.0.0",
           "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions": "14.0.0.0"
         },
         "runtime": {
@@ -915,6 +917,27 @@
           "P7CreateRestApi.dll": {}
         }
       },
+      "Microsoft.Data.Tools.Schema.Sql.UnitTesting/17.0.0.0": {
+        "runtime": {
+          "Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll": {
+            "assemblyVersion": "17.0.0.0",
+            "fileVersion": "17.9.56.1"
+          }
+        },
+        "resources": {
+          "fr/Microsoft.Data.Tools.Schema.Sql.UnitTesting.resources.dll": {
+            "locale": "fr"
+          }
+        }
+      },
+      "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter/17.0.0.0": {
+        "runtime": {
+          "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll": {
+            "assemblyVersion": "17.0.0.0",
+            "fileVersion": "17.9.56.1"
+          }
+        }
+      },
       "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions/14.0.0.0": {
         "runtime": {
           "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll": {
@@ -1458,6 +1481,16 @@
     },
     "P7CreateRestApi/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Data.Tools.Schema.Sql.UnitTesting/17.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter/17.0.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
