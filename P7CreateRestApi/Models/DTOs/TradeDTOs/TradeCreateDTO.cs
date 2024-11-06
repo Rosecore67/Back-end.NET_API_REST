@@ -15,6 +15,7 @@
         public string Benchmark { get; set; }
         public string Book { get; set; }
         public string CreationName { get; set; }
+        public string RevisionName { get; set; }
         public string DealName { get; set; }
         public string DealType { get; set; }
         public string SourceListId { get; set; }

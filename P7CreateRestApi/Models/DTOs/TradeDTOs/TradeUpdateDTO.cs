@@ -1,6 +1,6 @@
 ﻿namespace P7CreateRestApi.Models.DTOs.TradeDTOs
 {
-    public class TradeUdpateDTO
+    public class TradeUpdateDTO
     {
         public string Account { get; set; }
         public string AccountType { get; set; }

@@ -1,59 +1,160 @@
 using Dot.Net.WebApi.Domain;
 using Microsoft.AspNetCore.Mvc;
+using P7CreateRestApi.Models.DTOs.TradeDTOs;
+using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class TradeController : ControllerBase
     {
-        // TODO: Inject Trade service
+        private readonly ITradeService _tradeService;
+        private readonly ILogger<TradeController> _logger;
 
-        [HttpGet]
-        [Route("list")]
-        public IActionResult Home()
+        public TradeController(ITradeService tradeService, ILogger<TradeController> logger)
         {
-            // TODO: find all Trade, add to model
-            return Ok();
+            _tradeService = tradeService;
+            _logger = logger;
         }
 
-        [HttpGet]
-        [Route("add")]
-        public IActionResult AddTrade([FromBody]Trade trade)
+        // GET: api/trade/list
+        [HttpGet("list")]
+        public async Task<IActionResult> GetAllTrades()
         {
-            return Ok();
+            _logger.LogInformation("Received request to GET all trades");
+            var trades = await _tradeService.GetAllTradesAsync();
+
+            if (!trades.Any())
+            {
+                _logger.LogWarning("No trades found");
+            }
+
+            var tradeDtos = trades.Select(t => new TradeDTO
+            {
+                TradeId = t.TradeId,
+                Account = t.Account,
+                AccountType = t.AccountType,
+                BuyQuantity = t.BuyQuantity,
+                SellQuantity = t.SellQuantity,
+                BuyPrice = t.BuyPrice,
+                SellPrice = t.SellPrice,
+                TradeDate = t.TradeDate,
+                TradeSecurity = t.TradeSecurity,
+                TradeStatus = t.TradeStatus,
+                Trader = t.Trader,
+                Benchmark = t.Benchmark,
+                Book = t.Book,
+                CreationName = t.CreationName,
+                CreationDate = t.CreationDate,
+                RevisionName = t.RevisionName,
+                RevisionDate = t.RevisionDate,
+                DealName = t.DealName,
+                DealType = t.DealType,
+                SourceListId = t.SourceListId,
+                Side = t.Side
+            }).ToList();
+
+            return Ok(tradeDtos);
         }
 
-        [HttpGet]
-        [Route("validate")]
-        public IActionResult Validate([FromBody]Trade trade)
+        // POST: api/trade/add
+        [HttpPost("add")]
+        public async Task<IActionResult> AddTrade([FromBody] TradeCreateDTO tradeCreateDto)
         {
-            // TODO: check data valid and save to db, after saving return Trade list
-            return Ok();
+            _logger.LogInformation("Received request to CREATE a new trade");
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for AddTrade request");
+                return BadRequest(ModelState);
+            }
+
+            var trade = new Trade
+            {
+                Account = tradeCreateDto.Account,
+                AccountType = tradeCreateDto.AccountType,
+                BuyQuantity = tradeCreateDto.BuyQuantity,
+                SellQuantity = tradeCreateDto.SellQuantity,
+                BuyPrice = tradeCreateDto.BuyPrice,
+                SellPrice = tradeCreateDto.SellPrice,
+                TradeDate = tradeCreateDto.TradeDate,
+                TradeSecurity = tradeCreateDto.TradeSecurity,
+                TradeStatus = tradeCreateDto.TradeStatus,
+                Trader = tradeCreateDto.Trader,
+                Benchmark = tradeCreateDto.Benchmark,
+                Book = tradeCreateDto.Book,
+                CreationName = tradeCreateDto.CreationName,
+                RevisionName = tradeCreateDto.RevisionName,
+                DealName = tradeCreateDto.DealName,
+                DealType = tradeCreateDto.DealType,
+                SourceListId = tradeCreateDto.SourceListId,
+                Side = tradeCreateDto.Side
+            };
+
+            var createdTrade = await _tradeService.CreateTradeAsync(trade);
+
+            _logger.LogInformation("Created trade with ID {TradeId}", createdTrade.TradeId);
+
+            return CreatedAtAction(nameof(GetAllTrades), new { id = createdTrade.TradeId }, createdTrade);
         }
 
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
+        // PUT: api/trade/update/{id}
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateTrade(int id, [FromBody] TradeUpdateDTO tradeUpdateDto)
         {
-            // TODO: get Trade by Id and to model then show to the form
-            return Ok();
+            _logger.LogInformation("Received request to UPDATE trade with ID {TradeId}", id);
+
+            var existingTrade = await _tradeService.GetTradeByIdAsync(id);
+            if (existingTrade == null)
+            {
+                _logger.LogWarning("Trade with ID {TradeId} not found for update", id);
+                return NotFound();
+            }
+
+            existingTrade.Account = tradeUpdateDto.Account;
+            existingTrade.AccountType = tradeUpdateDto.AccountType;
+            existingTrade.BuyQuantity = tradeUpdateDto.BuyQuantity;
+            existingTrade.SellQuantity = tradeUpdateDto.SellQuantity;
+            existingTrade.BuyPrice = tradeUpdateDto.BuyPrice;
+            existingTrade.SellPrice = tradeUpdateDto.SellPrice;
+            existingTrade.TradeDate = tradeUpdateDto.TradeDate;
+            existingTrade.TradeSecurity = tradeUpdateDto.TradeSecurity;
+            existingTrade.TradeStatus = tradeUpdateDto.TradeStatus;
+            existingTrade.Trader = tradeUpdateDto.Trader;
+            existingTrade.Benchmark = tradeUpdateDto.Benchmark;
+            existingTrade.Book = tradeUpdateDto.Book;
+            existingTrade.RevisionName = tradeUpdateDto.RevisionName;
+            existingTrade.RevisionDate = tradeUpdateDto.RevisionDate;
+            existingTrade.DealName = tradeUpdateDto.DealName;
+            existingTrade.DealType = tradeUpdateDto.DealType;
+            existingTrade.SourceListId = tradeUpdateDto.SourceListId;
+            existingTrade.Side = tradeUpdateDto.Side;
+
+            var updatedTrade = await _tradeService.UpdateTradeAsync(id, existingTrade);
+
+            _logger.LogInformation("Updated trade with ID {TradeId}", id);
+
+            return Ok(updatedTrade);
         }
 
-        [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateTrade(int id, [FromBody] Trade trade)
+        // DELETE: api/trade/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTrade(int id)
         {
-            // TODO: check required fields, if valid call service to update Trade and return Trade list
-            return Ok();
-        }
+            _logger.LogInformation("Received request to DELETE trade with ID {TradeId}", id);
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteTrade(int id)
-        {
-            // TODO: Find Trade by Id and delete the Trade, return to Trade list
-            return Ok();
+            var trade = await _tradeService.GetTradeByIdAsync(id);
+            if (trade == null)
+            {
+                _logger.LogWarning("Trade with ID {TradeId} not found for deletion", id);
+                return NotFound();
+            }
+
+            await _tradeService.DeleteTradeAsync(id);
+            _logger.LogInformation("Deleted trade with ID {TradeId}", id);
+
+            return NoContent();
         }
     }
 }
