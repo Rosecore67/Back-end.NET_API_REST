@@ -38,16 +38,16 @@ namespace Dot.Net.WebApi.Controllers
                 return BadRequest();
             }
            
-           _userRepository.Add(user);
+           _userRepository.AddAsync(user);
 
             return Ok();
         }
 
         [HttpGet]
         [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
+        public async Task<IActionResult> ShowUpdateForm(int id)
         {
-            User user = _userRepository.FindById(id);
+            User user = await _userRepository.GetByIdAsync(id);
             
             if (user == null)
                 throw new ArgumentException("Invalid user Id:" + id);
@@ -65,9 +65,9 @@ namespace Dot.Net.WebApi.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            User user = _userRepository.FindById(id);
+            User user = await _userRepository.GetByIdAsync(id);
             
             if (user == null)
                 throw new ArgumentException("Invalid user Id:" + id);

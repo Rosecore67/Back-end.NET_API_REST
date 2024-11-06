@@ -1,36 +1,25 @@
 using Dot.Net.WebApi.Data;
 using Dot.Net.WebApi.Domain;
 using Microsoft.EntityFrameworkCore;
+using P7CreateRestApi.Repositories.Interface;
+using P7CreateRestApi.Repositories;
 
 namespace Dot.Net.WebApi.Repositories
 {
-    public class UserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public LocalDbContext DbContext { get; }
-
-        public UserRepository(LocalDbContext dbContext)
+        public UserRepository(LocalDbContext dbContext) : base(dbContext)
         {
-            DbContext = dbContext;
         }
 
         public User FindByUserName(string userName)
         {
-            return DbContext.Users.Where(user => user.UserName == userName)
-                                  .FirstOrDefault();
+            return _context.Users.FirstOrDefault(user => user.UserName == userName);
         }
 
-        public async Task<List<User>> FindAll()
+        public async Task<List<User>> FindAllAsync()
         {
-            return await DbContext.Users.ToListAsync();
-        }
-
-        public void Add(User user)
-        {
-        }
-
-        public User FindById(int id)
-        {
-            return null;
+            return await _context.Users.ToListAsync();
         }
     }
 }
