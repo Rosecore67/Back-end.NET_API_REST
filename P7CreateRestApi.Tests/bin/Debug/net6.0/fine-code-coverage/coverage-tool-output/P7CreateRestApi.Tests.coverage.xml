@@ -1,10 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <coverage line-rate="0.6187" branch-rate="0.5" version="1.9" timestamp="1731155669" lines-covered="456" lines-valid="737" branches-covered="16" branches-valid="32">
+=======
+<coverage line-rate="0.6333" branch-rate="0.5" version="1.9" timestamp="1730808294" lines-covered="482" lines-valid="761" branches-covered="16" branches-valid="32">
+>>>>>>> feature_US-3_Rating
   <sources>
     <source>C:\Users\gurdi\</source>
   </sources>
   <packages>
+<<<<<<< HEAD
     <package name="P7CreateRestApi" line-rate="0.45630000000000004" branch-rate="0.5" complexity="211">
+=======
+    <package name="P7CreateRestApi" line-rate="0.45159999999999995" branch-rate="0.5" complexity="209">
+>>>>>>> feature_US-3_Rating
       <classes>
         <class name="Program" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Program.cs" line-rate="0" branch-rate="0" complexity="2">
           <methods>
@@ -212,6 +220,7 @@
             <line number="48" hits="0" branch="False" />
           </lines>
         </class>
+<<<<<<< HEAD
         <class name="P7CreateRestApi.Services.CurvePointService" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\CurvePointService.cs" line-rate="0" branch-rate="1" complexity="1">
           <methods>
             <method name=".ctor" signature="(P7CreateRestApi.Repositories.Interface.ICurvePointRepository)" line-rate="0" branch-rate="1" complexity="1">
@@ -220,10 +229,21 @@
                 <line number="12" hits="0" branch="False" />
                 <line number="13" hits="0" branch="False" />
                 <line number="14" hits="0" branch="False" />
+=======
+        <class name="P7CreateRestApi.Services.RatingService" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\RatingService.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name=".ctor" signature="(P7CreateRestApi.Repositories.Interface.IRatingRepository)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="12" hits="0" branch="False" />
+                <line number="13" hits="0" branch="False" />
+                <line number="14" hits="0" branch="False" />
+                <line number="15" hits="0" branch="False" />
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="11" hits="0" branch="False" />
             <line number="12" hits="0" branch="False" />
             <line number="13" hits="0" branch="False" />
@@ -231,6 +251,15 @@
           </lines>
         </class>
         <class name="P7CreateRestApi.Services.CurvePointService/&lt;CreateCurvePointAsync&gt;d__4" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\CurvePointService.cs" line-rate="0" branch-rate="1" complexity="1">
+=======
+            <line number="12" hits="0" branch="False" />
+            <line number="13" hits="0" branch="False" />
+            <line number="14" hits="0" branch="False" />
+            <line number="15" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Services.RatingService/&lt;CreateRatingAsync&gt;d__4" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\RatingService.cs" line-rate="0" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
           <methods>
             <method name="MoveNext" signature="()" line-rate="0" branch-rate="1" complexity="1">
               <lines>
@@ -248,6 +277,7 @@
             <line number="30" hits="0" branch="False" />
           </lines>
         </class>
+<<<<<<< HEAD
         <class name="P7CreateRestApi.Services.CurvePointService/&lt;DeleteCurvePointAsync&gt;d__6" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\CurvePointService.cs" line-rate="0" branch-rate="0" complexity="2">
           <methods>
             <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="2">
@@ -255,24 +285,46 @@
                 <line number="47" hits="0" branch="False" />
                 <line number="48" hits="0" branch="False" />
                 <line number="49" hits="0" branch="True" condition-coverage="0% (0/2)">
+=======
+        <class name="P7CreateRestApi.Services.RatingService/&lt;DeleteRatingAsync&gt;d__6" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\RatingService.cs" line-rate="0" branch-rate="0" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="46" hits="0" branch="False" />
+                <line number="47" hits="0" branch="False" />
+                <line number="48" hits="0" branch="True" condition-coverage="0% (0/2)">
+>>>>>>> feature_US-3_Rating
                   <conditions>
                     <condition number="175" type="jump" coverage="0%" />
                   </conditions>
                 </line>
+<<<<<<< HEAD
                 <line number="51" hits="0" branch="False" />
                 <line number="52" hits="0" branch="False" />
                 <line number="53" hits="0" branch="False" />
+=======
+                <line number="50" hits="0" branch="False" />
+                <line number="51" hits="0" branch="False" />
+                <line number="52" hits="0" branch="False" />
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="47" hits="0" branch="False" />
             <line number="48" hits="0" branch="False" />
             <line number="49" hits="0" branch="True" condition-coverage="0% (0/2)">
+=======
+            <line number="46" hits="0" branch="False" />
+            <line number="47" hits="0" branch="False" />
+            <line number="48" hits="0" branch="True" condition-coverage="0% (0/2)">
+>>>>>>> feature_US-3_Rating
               <conditions>
                 <condition number="175" type="jump" coverage="0%" />
               </conditions>
             </line>
+<<<<<<< HEAD
             <line number="51" hits="0" branch="False" />
             <line number="52" hits="0" branch="False" />
             <line number="53" hits="0" branch="False" />
@@ -285,10 +337,25 @@
                 <line number="17" hits="0" branch="False" />
                 <line number="18" hits="0" branch="False" />
                 <line number="19" hits="0" branch="False" />
+=======
+            <line number="50" hits="0" branch="False" />
+            <line number="51" hits="0" branch="False" />
+            <line number="52" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Services.RatingService/&lt;GetAllRatingsAsync&gt;d__2" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\RatingService.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="18" hits="0" branch="False" />
+                <line number="19" hits="0" branch="False" />
+                <line number="20" hits="0" branch="False" />
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="17" hits="0" branch="False" />
             <line number="18" hits="0" branch="False" />
             <line number="19" hits="0" branch="False" />
@@ -301,10 +368,25 @@
                 <line number="22" hits="0" branch="False" />
                 <line number="23" hits="0" branch="False" />
                 <line number="24" hits="0" branch="False" />
+=======
+            <line number="18" hits="0" branch="False" />
+            <line number="19" hits="0" branch="False" />
+            <line number="20" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Services.RatingService/&lt;GetRatingByIdAsync&gt;d__3" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\RatingService.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="23" hits="0" branch="False" />
+                <line number="24" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="22" hits="0" branch="False" />
             <line number="23" hits="0" branch="False" />
             <line number="24" hits="0" branch="False" />
@@ -317,10 +399,25 @@
                 <line number="33" hits="0" branch="False" />
                 <line number="34" hits="0" branch="False" />
                 <line number="35" hits="0" branch="True" condition-coverage="0% (0/2)">
+=======
+            <line number="23" hits="0" branch="False" />
+            <line number="24" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Services.RatingService/&lt;UpdateRatingAsync&gt;d__5" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Services\RatingService.cs" line-rate="0" branch-rate="0" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="32" hits="0" branch="False" />
+                <line number="33" hits="0" branch="False" />
+                <line number="34" hits="0" branch="True" condition-coverage="0% (0/2)">
+>>>>>>> feature_US-3_Rating
                   <conditions>
                     <condition number="175" type="jump" coverage="0%" />
                   </conditions>
                 </line>
+<<<<<<< HEAD
                 <line number="37" hits="0" branch="False" />
                 <line number="38" hits="0" branch="False" />
                 <line number="39" hits="0" branch="False" />
@@ -328,17 +425,33 @@
                 <line number="42" hits="0" branch="False" />
                 <line number="43" hits="0" branch="False" />
                 <line number="44" hits="0" branch="False" />
+=======
+                <line number="36" hits="0" branch="False" />
+                <line number="37" hits="0" branch="False" />
+                <line number="38" hits="0" branch="False" />
+                <line number="39" hits="0" branch="False" />
+                <line number="41" hits="0" branch="False" />
+                <line number="42" hits="0" branch="False" />
+                <line number="43" hits="0" branch="False" />
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="33" hits="0" branch="False" />
             <line number="34" hits="0" branch="False" />
             <line number="35" hits="0" branch="True" condition-coverage="0% (0/2)">
+=======
+            <line number="32" hits="0" branch="False" />
+            <line number="33" hits="0" branch="False" />
+            <line number="34" hits="0" branch="True" condition-coverage="0% (0/2)">
+>>>>>>> feature_US-3_Rating
               <conditions>
                 <condition number="175" type="jump" coverage="0%" />
               </conditions>
             </line>
+<<<<<<< HEAD
             <line number="37" hits="0" branch="False" />
             <line number="38" hits="0" branch="False" />
             <line number="39" hits="0" branch="False" />
@@ -346,6 +459,15 @@
             <line number="42" hits="0" branch="False" />
             <line number="43" hits="0" branch="False" />
             <line number="44" hits="0" branch="False" />
+=======
+            <line number="36" hits="0" branch="False" />
+            <line number="37" hits="0" branch="False" />
+            <line number="38" hits="0" branch="False" />
+            <line number="39" hits="0" branch="False" />
+            <line number="41" hits="0" branch="False" />
+            <line number="42" hits="0" branch="False" />
+            <line number="43" hits="0" branch="False" />
+>>>>>>> feature_US-3_Rating
           </lines>
         </class>
         <class name="P7CreateRestApi.Repositories.BaseRepository`1" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Repositories\BaseRepository.cs" line-rate="0" branch-rate="1" complexity="1">
@@ -514,6 +636,7 @@
             <line number="9" hits="0" branch="False" />
           </lines>
         </class>
+<<<<<<< HEAD
         <class name="P7CreateRestApi.Models.DTOs.CurveDTOs.CurvePointCreateDTO" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Models\DTOs\CurveDTOs\CurvePointCreateDTO.cs" line-rate="1" branch-rate="1" complexity="4">
           <methods>
             <method name="get_CurveId" signature="()" line-rate="1" branch-rate="1" complexity="1">
@@ -532,12 +655,33 @@
               </lines>
             </method>
             <method name="get_CurvePointValue" signature="()" line-rate="1" branch-rate="1" complexity="1">
+=======
+        <class name="P7CreateRestApi.Models.DTOs.RatingDTOs.RatingCreateDTO" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Models\DTOs\RatingDTOs\RatingCreateDTO.cs" line-rate="1" branch-rate="1" complexity="4">
+          <methods>
+            <method name="get_MoodysRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="5" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="get_SandPRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="6" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name="get_FitchRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name="get_OrderNumber" signature="()" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
               <lines>
                 <line number="8" hits="3" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="5" hits="1" branch="False" />
             <line number="6" hits="1" branch="False" />
             <line number="7" hits="2" branch="False" />
@@ -545,37 +689,65 @@
           </lines>
         </class>
         <class name="P7CreateRestApi.Models.DTOs.CurveDTOs.CurvePointDTO" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Models\DTOs\CurveDTOs\CurvePointDTO.cs" line-rate="1" branch-rate="1" complexity="6">
+=======
+            <line number="5" hits="2" branch="False" />
+            <line number="6" hits="3" branch="False" />
+            <line number="7" hits="3" branch="False" />
+            <line number="8" hits="3" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Models.DTOs.RatingDTOs.RatingDTO" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Models\DTOs\RatingDTOs\RatingDTO.cs" line-rate="1" branch-rate="1" complexity="5">
+>>>>>>> feature_US-3_Rating
           <methods>
             <method name="get_Id" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
                 <line number="5" hits="2" branch="False" />
               </lines>
             </method>
+<<<<<<< HEAD
             <method name="get_CurveId" signature="()" line-rate="1" branch-rate="1" complexity="1">
+=======
+            <method name="get_MoodysRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
               <lines>
                 <line number="6" hits="2" branch="False" />
               </lines>
             </method>
+<<<<<<< HEAD
             <method name="get_AsOfDate" signature="()" line-rate="1" branch-rate="1" complexity="1">
+=======
+            <method name="get_SandPRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
               <lines>
                 <line number="7" hits="2" branch="False" />
               </lines>
             </method>
+<<<<<<< HEAD
             <method name="get_Term" signature="()" line-rate="1" branch-rate="1" complexity="1">
+=======
+            <method name="get_FitchRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
               <lines>
                 <line number="8" hits="2" branch="False" />
               </lines>
             </method>
+<<<<<<< HEAD
             <method name="get_CurvePointValue" signature="()" line-rate="1" branch-rate="1" complexity="1">
+=======
+            <method name="get_OrderNumber" signature="()" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
               <lines>
                 <line number="9" hits="2" branch="False" />
               </lines>
             </method>
+<<<<<<< HEAD
             <method name="get_CreationDate" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
                 <line number="10" hits="2" branch="False" />
               </lines>
             </method>
+=======
+>>>>>>> feature_US-3_Rating
           </methods>
           <lines>
             <line number="5" hits="2" branch="False" />
@@ -583,6 +755,7 @@
             <line number="7" hits="2" branch="False" />
             <line number="8" hits="2" branch="False" />
             <line number="9" hits="2" branch="False" />
+<<<<<<< HEAD
             <line number="10" hits="2" branch="False" />
           </lines>
         </class>
@@ -599,19 +772,45 @@
               </lines>
             </method>
             <method name="get_Term" signature="()" line-rate="1" branch-rate="1" complexity="1">
+=======
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Models.DTOs.RatingDTOs.RatingUpdateDTO" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Models\DTOs\RatingDTOs\RatingUpdateDTO.cs" line-rate="1" branch-rate="1" complexity="4">
+          <methods>
+            <method name="get_MoodysRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="5" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name="get_SandPRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="6" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name="get_FitchRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
               <lines>
                 <line number="7" hits="3" branch="False" />
               </lines>
             </method>
+<<<<<<< HEAD
             <method name="get_CurvePointValue" signature="()" line-rate="1" branch-rate="1" complexity="1">
+=======
+            <method name="get_OrderNumber" signature="()" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
               <lines>
                 <line number="8" hits="3" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="5" hits="2" branch="False" />
             <line number="6" hits="1" branch="False" />
+=======
+            <line number="5" hits="3" branch="False" />
+            <line number="6" hits="3" branch="False" />
+>>>>>>> feature_US-3_Rating
             <line number="7" hits="3" branch="False" />
             <line number="8" hits="3" branch="False" />
           </lines>
@@ -1872,70 +2071,226 @@
             <line number="16" hits="0" branch="False" />
           </lines>
         </class>
-        <class name="Dot.Net.WebApi.Controllers.RatingController" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Controllers\RatingController.cs" line-rate="0" branch-rate="1" complexity="6">
+        <class name="Dot.Net.WebApi.Controllers.RatingController" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Controllers\RatingController.cs" line-rate="1" branch-rate="1" complexity="1">
           <methods>
-            <method name="Home" signature="()" line-rate="0" branch-rate="1" complexity="1">
+            <method name=".ctor" signature="(P7CreateRestApi.Services.Interface.IRatingService,Microsoft.Extensions.Logging.ILogger`1&lt;Dot.Net.WebApi.Controllers.RatingController&gt;)" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="15" hits="0" branch="False" />
-                <line number="17" hits="0" branch="False" />
-                <line number="18" hits="0" branch="False" />
-              </lines>
-            </method>
-            <method name="AddRatingForm" signature="(Dot.Net.WebApi.Controllers.Domain.Rating)" line-rate="0" branch-rate="1" complexity="1">
-              <lines>
-                <line number="23" hits="0" branch="False" />
-                <line number="24" hits="0" branch="False" />
-                <line number="25" hits="0" branch="False" />
-              </lines>
-            </method>
-            <method name="Validate" signature="(Dot.Net.WebApi.Controllers.Domain.Rating)" line-rate="0" branch-rate="1" complexity="1">
-              <lines>
-                <line number="30" hits="0" branch="False" />
-                <line number="32" hits="0" branch="False" />
-                <line number="33" hits="0" branch="False" />
-              </lines>
-            </method>
-            <method name="ShowUpdateForm" signature="(System.Int32)" line-rate="0" branch-rate="1" complexity="1">
-              <lines>
-                <line number="38" hits="0" branch="False" />
-                <line number="40" hits="0" branch="False" />
-                <line number="41" hits="0" branch="False" />
-              </lines>
-            </method>
-            <method name="UpdateRating" signature="(System.Int32,Dot.Net.WebApi.Controllers.Domain.Rating)" line-rate="0" branch-rate="1" complexity="1">
-              <lines>
-                <line number="46" hits="0" branch="False" />
-                <line number="48" hits="0" branch="False" />
-                <line number="49" hits="0" branch="False" />
-              </lines>
-            </method>
-            <method name="DeleteRating" signature="(System.Int32)" line-rate="0" branch-rate="1" complexity="1">
-              <lines>
-                <line number="54" hits="0" branch="False" />
-                <line number="56" hits="0" branch="False" />
-                <line number="57" hits="0" branch="False" />
+                <line number="15" hits="8" branch="False" />
+                <line number="16" hits="8" branch="False" />
+                <line number="17" hits="8" branch="False" />
+                <line number="18" hits="8" branch="False" />
+                <line number="19" hits="8" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="15" hits="0" branch="False" />
-            <line number="17" hits="0" branch="False" />
-            <line number="18" hits="0" branch="False" />
-            <line number="23" hits="0" branch="False" />
-            <line number="24" hits="0" branch="False" />
-            <line number="25" hits="0" branch="False" />
-            <line number="30" hits="0" branch="False" />
-            <line number="32" hits="0" branch="False" />
-            <line number="33" hits="0" branch="False" />
-            <line number="38" hits="0" branch="False" />
-            <line number="40" hits="0" branch="False" />
-            <line number="41" hits="0" branch="False" />
-            <line number="46" hits="0" branch="False" />
-            <line number="48" hits="0" branch="False" />
-            <line number="49" hits="0" branch="False" />
-            <line number="54" hits="0" branch="False" />
-            <line number="56" hits="0" branch="False" />
-            <line number="57" hits="0" branch="False" />
+            <line number="15" hits="8" branch="False" />
+            <line number="16" hits="8" branch="False" />
+            <line number="17" hits="8" branch="False" />
+            <line number="18" hits="8" branch="False" />
+            <line number="19" hits="8" branch="False" />
+          </lines>
+        </class>
+        <class name="Dot.Net.WebApi.Controllers.RatingController/&lt;&gt;c" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Controllers\RatingController.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="&lt;GetAllRatings&gt;b__3_0" signature="(Dot.Net.WebApi.Controllers.Domain.Rating)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="33" hits="4" branch="False" />
+                <line number="34" hits="4" branch="False" />
+                <line number="35" hits="4" branch="False" />
+                <line number="36" hits="4" branch="False" />
+                <line number="37" hits="4" branch="False" />
+                <line number="38" hits="4" branch="False" />
+                <line number="39" hits="4" branch="False" />
+                <line number="40" hits="4" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="33" hits="4" branch="False" />
+            <line number="34" hits="4" branch="False" />
+            <line number="35" hits="4" branch="False" />
+            <line number="36" hits="4" branch="False" />
+            <line number="37" hits="4" branch="False" />
+            <line number="38" hits="4" branch="False" />
+            <line number="39" hits="4" branch="False" />
+            <line number="40" hits="4" branch="False" />
+          </lines>
+        </class>
+        <class name="Dot.Net.WebApi.Controllers.RatingController/&lt;AddRating&gt;d__4" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Controllers\RatingController.cs" line-rate="1" branch-rate="1" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="48" hits="2" branch="False" />
+                <line number="49" hits="2" branch="False" />
+                <line number="51" hits="2" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="66" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="52" hits="1" branch="False" />
+                <line number="53" hits="1" branch="False" />
+                <line number="54" hits="1" branch="False" />
+                <line number="57" hits="1" branch="False" />
+                <line number="58" hits="1" branch="False" />
+                <line number="59" hits="1" branch="False" />
+                <line number="60" hits="1" branch="False" />
+                <line number="61" hits="1" branch="False" />
+                <line number="62" hits="1" branch="False" />
+                <line number="63" hits="1" branch="False" />
+                <line number="65" hits="1" branch="False" />
+                <line number="67" hits="1" branch="False" />
+                <line number="69" hits="1" branch="False" />
+                <line number="70" hits="2" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="48" hits="2" branch="False" />
+            <line number="49" hits="2" branch="False" />
+            <line number="51" hits="2" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="66" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="52" hits="1" branch="False" />
+            <line number="53" hits="1" branch="False" />
+            <line number="54" hits="1" branch="False" />
+            <line number="57" hits="1" branch="False" />
+            <line number="58" hits="1" branch="False" />
+            <line number="59" hits="1" branch="False" />
+            <line number="60" hits="1" branch="False" />
+            <line number="61" hits="1" branch="False" />
+            <line number="62" hits="1" branch="False" />
+            <line number="63" hits="1" branch="False" />
+            <line number="65" hits="1" branch="False" />
+            <line number="67" hits="1" branch="False" />
+            <line number="69" hits="1" branch="False" />
+            <line number="70" hits="2" branch="False" />
+          </lines>
+        </class>
+        <class name="Dot.Net.WebApi.Controllers.RatingController/&lt;DeleteRating&gt;d__6" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Controllers\RatingController.cs" line-rate="1" branch-rate="1" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="100" hits="2" branch="False" />
+                <line number="101" hits="2" branch="False" />
+                <line number="103" hits="2" branch="False" />
+                <line number="104" hits="2" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="217" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="105" hits="1" branch="False" />
+                <line number="106" hits="1" branch="False" />
+                <line number="107" hits="1" branch="False" />
+                <line number="110" hits="1" branch="False" />
+                <line number="111" hits="1" branch="False" />
+                <line number="113" hits="1" branch="False" />
+                <line number="114" hits="2" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="100" hits="2" branch="False" />
+            <line number="101" hits="2" branch="False" />
+            <line number="103" hits="2" branch="False" />
+            <line number="104" hits="2" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="217" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="105" hits="1" branch="False" />
+            <line number="106" hits="1" branch="False" />
+            <line number="107" hits="1" branch="False" />
+            <line number="110" hits="1" branch="False" />
+            <line number="111" hits="1" branch="False" />
+            <line number="113" hits="1" branch="False" />
+            <line number="114" hits="2" branch="False" />
+          </lines>
+        </class>
+        <class name="Dot.Net.WebApi.Controllers.RatingController/&lt;GetAllRatings&gt;d__3" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Controllers\RatingController.cs" line-rate="1" branch-rate="1" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="24" hits="2" branch="False" />
+                <line number="25" hits="2" branch="False" />
+                <line number="26" hits="2" branch="False" />
+                <line number="28" hits="2" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="190" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="29" hits="1" branch="False" />
+                <line number="30" hits="1" branch="False" />
+                <line number="31" hits="1" branch="False" />
+                <line number="42" hits="2" branch="False" />
+                <line number="43" hits="2" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="24" hits="2" branch="False" />
+            <line number="25" hits="2" branch="False" />
+            <line number="26" hits="2" branch="False" />
+            <line number="28" hits="2" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="190" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="29" hits="1" branch="False" />
+            <line number="30" hits="1" branch="False" />
+            <line number="31" hits="1" branch="False" />
+            <line number="42" hits="2" branch="False" />
+            <line number="43" hits="2" branch="False" />
+          </lines>
+        </class>
+        <class name="Dot.Net.WebApi.Controllers.RatingController/&lt;UpdateRating&gt;d__5" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Controllers\RatingController.cs" line-rate="1" branch-rate="1" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="75" hits="2" branch="False" />
+                <line number="76" hits="2" branch="False" />
+                <line number="78" hits="2" branch="False" />
+                <line number="79" hits="2" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="217" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="80" hits="1" branch="False" />
+                <line number="81" hits="1" branch="False" />
+                <line number="82" hits="1" branch="False" />
+                <line number="85" hits="1" branch="False" />
+                <line number="86" hits="1" branch="False" />
+                <line number="87" hits="1" branch="False" />
+                <line number="88" hits="1" branch="False" />
+                <line number="90" hits="1" branch="False" />
+                <line number="92" hits="1" branch="False" />
+                <line number="94" hits="1" branch="False" />
+                <line number="95" hits="2" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="75" hits="2" branch="False" />
+            <line number="76" hits="2" branch="False" />
+            <line number="78" hits="2" branch="False" />
+            <line number="79" hits="2" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="217" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="80" hits="1" branch="False" />
+            <line number="81" hits="1" branch="False" />
+            <line number="82" hits="1" branch="False" />
+            <line number="85" hits="1" branch="False" />
+            <line number="86" hits="1" branch="False" />
+            <line number="87" hits="1" branch="False" />
+            <line number="88" hits="1" branch="False" />
+            <line number="90" hits="1" branch="False" />
+            <line number="92" hits="1" branch="False" />
+            <line number="94" hits="1" branch="False" />
+            <line number="95" hits="2" branch="False" />
           </lines>
         </class>
         <class name="Dot.Net.WebApi.Controllers.RuleNameController" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Controllers\RuleNameController.cs" line-rate="0" branch-rate="1" complexity="6">
@@ -2256,45 +2611,49 @@
             <line number="12" hits="0" branch="False" />
           </lines>
         </class>
-        <class name="Dot.Net.WebApi.Controllers.Domain.Rating" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Domain\Rating.cs" line-rate="0" branch-rate="1" complexity="5">
+        <class name="Dot.Net.WebApi.Controllers.Domain.Rating" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi\Domain\Rating.cs" line-rate="1" branch-rate="1" complexity="5">
           <methods>
-            <method name="get_Id" signature="()" line-rate="0" branch-rate="1" complexity="1">
+            <method name="get_Id" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="6" hits="0" branch="False" />
+                <line number="6" hits="9" branch="False" />
               </lines>
             </method>
-            <method name="get_MoodysRating" signature="()" line-rate="0" branch-rate="1" complexity="1">
+            <method name="get_MoodysRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="7" hits="0" branch="False" />
+                <line number="7" hits="9" branch="False" />
               </lines>
             </method>
-            <method name="get_SandPRating" signature="()" line-rate="0" branch-rate="1" complexity="1">
+            <method name="get_SandPRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="8" hits="0" branch="False" />
+                <line number="8" hits="9" branch="False" />
               </lines>
             </method>
-            <method name="get_FitchRating" signature="()" line-rate="0" branch-rate="1" complexity="1">
+            <method name="get_FitchRating" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="9" hits="0" branch="False" />
+                <line number="9" hits="9" branch="False" />
               </lines>
             </method>
-            <method name="get_OrderNumber" signature="()" line-rate="0" branch-rate="1" complexity="1">
+            <method name="get_OrderNumber" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="10" hits="0" branch="False" />
+                <line number="10" hits="9" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="6" hits="0" branch="False" />
-            <line number="7" hits="0" branch="False" />
-            <line number="8" hits="0" branch="False" />
-            <line number="9" hits="0" branch="False" />
-            <line number="10" hits="0" branch="False" />
+            <line number="6" hits="9" branch="False" />
+            <line number="7" hits="9" branch="False" />
+            <line number="8" hits="9" branch="False" />
+            <line number="9" hits="9" branch="False" />
+            <line number="10" hits="9" branch="False" />
           </lines>
         </class>
       </classes>
     </package>
+<<<<<<< HEAD
     <package name="P7CreateRestApi.Tests" line-rate="0.9954000000000001" branch-rate="1" complexity="19">
+=======
+    <package name="P7CreateRestApi.Tests" line-rate="0.996" branch-rate="1" complexity="19">
+>>>>>>> feature_US-3_Rating
       <classes>
         <class name="AutoGeneratedProgram" filename=".nuget\packages\microsoft.net.test.sdk\17.5.0\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.Program.cs" line-rate="0" branch-rate="1" complexity="1">
           <methods>
@@ -2644,7 +3003,11 @@
             <line number="152" hits="1" branch="False" />
           </lines>
         </class>
+<<<<<<< HEAD
         <class name="P7CreateRestApi.Tests.CurveControllerTests" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\CurveControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+=======
+        <class name="P7CreateRestApi.Tests.RatingControllerTests" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
           <methods>
             <method name="Setup" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
@@ -2664,6 +3027,7 @@
             <line number="24" hits="8" branch="False" />
           </lines>
         </class>
+<<<<<<< HEAD
         <class name="P7CreateRestApi.Tests.CurveControllerTests/&lt;AddCurvePoint_ShouldLogWarning_WhenModelStateIsInvalid&gt;d__7" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\CurveControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
           <methods>
             <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
@@ -2672,28 +3036,101 @@
                 <line number="89" hits="1" branch="False" />
                 <line number="90" hits="1" branch="False" />
                 <line number="93" hits="1" branch="False" />
+=======
+        <class name="P7CreateRestApi.Tests.RatingControllerTests/&lt;AddRating_ShouldLogWarning_WhenModelStateIsInvalid&gt;d__7" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="103" hits="1" branch="False" />
+                <line number="105" hits="1" branch="False" />
+                <line number="106" hits="1" branch="False" />
+                <line number="109" hits="1" branch="False" />
+                <line number="112" hits="1" branch="False" />
+                <line number="113" hits="1" branch="False" />
+                <line number="114" hits="1" branch="False" />
+                <line number="115" hits="1" branch="False" />
+                <line number="116" hits="1" branch="False" />
+                <line number="117" hits="1" branch="False" />
+                <line number="118" hits="1" branch="False" />
+                <line number="119" hits="1" branch="False" />
+                <line number="120" hits="1" branch="False" />
+                <line number="121" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="103" hits="1" branch="False" />
+            <line number="105" hits="1" branch="False" />
+            <line number="106" hits="1" branch="False" />
+            <line number="109" hits="1" branch="False" />
+            <line number="112" hits="1" branch="False" />
+            <line number="113" hits="1" branch="False" />
+            <line number="114" hits="1" branch="False" />
+            <line number="115" hits="1" branch="False" />
+            <line number="116" hits="1" branch="False" />
+            <line number="117" hits="1" branch="False" />
+            <line number="118" hits="1" branch="False" />
+            <line number="119" hits="1" branch="False" />
+            <line number="120" hits="1" branch="False" />
+            <line number="121" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Tests.RatingControllerTests/&lt;AddRating_ShouldReturnCreatedAtAction_WhenRatingIsAdded&gt;d__6" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="79" hits="1" branch="False" />
+                <line number="81" hits="1" branch="False" />
+                <line number="82" hits="1" branch="False" />
+                <line number="84" hits="1" branch="False" />
+                <line number="87" hits="1" branch="False" />
+                <line number="90" hits="1" branch="False" />
+                <line number="91" hits="1" branch="False" />
+                <line number="92" hits="1" branch="False" />
+                <line number="93" hits="1" branch="False" />
+                <line number="94" hits="1" branch="False" />
+                <line number="95" hits="1" branch="False" />
+>>>>>>> feature_US-3_Rating
                 <line number="96" hits="1" branch="False" />
                 <line number="97" hits="1" branch="False" />
                 <line number="98" hits="1" branch="False" />
                 <line number="99" hits="1" branch="False" />
+<<<<<<< HEAD
                 <line number="100" hits="1" branch="False" />
                 <line number="101" hits="1" branch="False" />
                 <line number="102" hits="1" branch="False" />
                 <line number="103" hits="1" branch="False" />
                 <line number="104" hits="1" branch="False" />
                 <line number="105" hits="1" branch="False" />
+=======
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="87" hits="1" branch="False" />
             <line number="89" hits="1" branch="False" />
             <line number="90" hits="1" branch="False" />
             <line number="93" hits="1" branch="False" />
+=======
+            <line number="79" hits="1" branch="False" />
+            <line number="81" hits="1" branch="False" />
+            <line number="82" hits="1" branch="False" />
+            <line number="84" hits="1" branch="False" />
+            <line number="87" hits="1" branch="False" />
+            <line number="90" hits="1" branch="False" />
+            <line number="91" hits="1" branch="False" />
+            <line number="92" hits="1" branch="False" />
+            <line number="93" hits="1" branch="False" />
+            <line number="94" hits="1" branch="False" />
+            <line number="95" hits="1" branch="False" />
+>>>>>>> feature_US-3_Rating
             <line number="96" hits="1" branch="False" />
             <line number="97" hits="1" branch="False" />
             <line number="98" hits="1" branch="False" />
             <line number="99" hits="1" branch="False" />
+<<<<<<< HEAD
             <line number="100" hits="1" branch="False" />
             <line number="101" hits="1" branch="False" />
             <line number="102" hits="1" branch="False" />
@@ -2770,10 +3207,35 @@
                 <line number="184" hits="1" branch="False" />
                 <line number="185" hits="1" branch="False" />
                 <line number="186" hits="1" branch="False" />
+=======
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Tests.RatingControllerTests/&lt;DeleteRating_ShouldReturnNoContent_WhenRatingIsDeleted&gt;d__10" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="175" hits="1" branch="False" />
+                <line number="177" hits="1" branch="False" />
+                <line number="178" hits="1" branch="False" />
+                <line number="180" hits="1" branch="False" />
+                <line number="181" hits="1" branch="False" />
+                <line number="184" hits="1" branch="False" />
+                <line number="187" hits="1" branch="False" />
+                <line number="188" hits="1" branch="False" />
+                <line number="189" hits="1" branch="False" />
+                <line number="190" hits="1" branch="False" />
+                <line number="191" hits="1" branch="False" />
+                <line number="192" hits="1" branch="False" />
+                <line number="193" hits="1" branch="False" />
+                <line number="194" hits="1" branch="False" />
+                <line number="195" hits="1" branch="False" />
+                <line number="196" hits="1" branch="False" />
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="168" hits="1" branch="False" />
             <line number="170" hits="1" branch="False" />
             <line number="171" hits="1" branch="False" />
@@ -2807,10 +3269,49 @@
                 <line number="65" hits="1" branch="False" />
                 <line number="66" hits="1" branch="False" />
                 <line number="67" hits="1" branch="False" />
+=======
+            <line number="175" hits="1" branch="False" />
+            <line number="177" hits="1" branch="False" />
+            <line number="178" hits="1" branch="False" />
+            <line number="180" hits="1" branch="False" />
+            <line number="181" hits="1" branch="False" />
+            <line number="184" hits="1" branch="False" />
+            <line number="187" hits="1" branch="False" />
+            <line number="188" hits="1" branch="False" />
+            <line number="189" hits="1" branch="False" />
+            <line number="190" hits="1" branch="False" />
+            <line number="191" hits="1" branch="False" />
+            <line number="192" hits="1" branch="False" />
+            <line number="193" hits="1" branch="False" />
+            <line number="194" hits="1" branch="False" />
+            <line number="195" hits="1" branch="False" />
+            <line number="196" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Tests.RatingControllerTests/&lt;DeleteRating_ShouldReturnNotFound_WhenRatingDoesNotExist&gt;d__11" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="200" hits="1" branch="False" />
+                <line number="202" hits="1" branch="False" />
+                <line number="203" hits="1" branch="False" />
+                <line number="206" hits="1" branch="False" />
+                <line number="209" hits="1" branch="False" />
+                <line number="210" hits="1" branch="False" />
+                <line number="211" hits="1" branch="False" />
+                <line number="212" hits="1" branch="False" />
+                <line number="213" hits="1" branch="False" />
+                <line number="214" hits="1" branch="False" />
+                <line number="215" hits="1" branch="False" />
+                <line number="216" hits="1" branch="False" />
+                <line number="217" hits="1" branch="False" />
+                <line number="218" hits="1" branch="False" />
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="49" hits="1" branch="False" />
             <line number="51" hits="1" branch="False" />
             <line number="54" hits="1" branch="False" />
@@ -2827,6 +3328,61 @@
           </lines>
         </class>
         <class name="P7CreateRestApi.Tests.CurveControllerTests/&lt;GetAllCurvePoints_ShouldReturnOkResult_WithListOfCurvePoints&gt;d__4" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\CurveControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+=======
+            <line number="200" hits="1" branch="False" />
+            <line number="202" hits="1" branch="False" />
+            <line number="203" hits="1" branch="False" />
+            <line number="206" hits="1" branch="False" />
+            <line number="209" hits="1" branch="False" />
+            <line number="210" hits="1" branch="False" />
+            <line number="211" hits="1" branch="False" />
+            <line number="212" hits="1" branch="False" />
+            <line number="213" hits="1" branch="False" />
+            <line number="214" hits="1" branch="False" />
+            <line number="215" hits="1" branch="False" />
+            <line number="216" hits="1" branch="False" />
+            <line number="217" hits="1" branch="False" />
+            <line number="218" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Tests.RatingControllerTests/&lt;GetAllRatings_ShouldLogWarning_WhenNoRatingsFound&gt;d__5" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="58" hits="1" branch="False" />
+                <line number="60" hits="1" branch="False" />
+                <line number="63" hits="1" branch="False" />
+                <line number="66" hits="1" branch="False" />
+                <line number="67" hits="1" branch="False" />
+                <line number="68" hits="1" branch="False" />
+                <line number="69" hits="1" branch="False" />
+                <line number="70" hits="1" branch="False" />
+                <line number="71" hits="1" branch="False" />
+                <line number="72" hits="1" branch="False" />
+                <line number="73" hits="1" branch="False" />
+                <line number="74" hits="1" branch="False" />
+                <line number="75" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="58" hits="1" branch="False" />
+            <line number="60" hits="1" branch="False" />
+            <line number="63" hits="1" branch="False" />
+            <line number="66" hits="1" branch="False" />
+            <line number="67" hits="1" branch="False" />
+            <line number="68" hits="1" branch="False" />
+            <line number="69" hits="1" branch="False" />
+            <line number="70" hits="1" branch="False" />
+            <line number="71" hits="1" branch="False" />
+            <line number="72" hits="1" branch="False" />
+            <line number="73" hits="1" branch="False" />
+            <line number="74" hits="1" branch="False" />
+            <line number="75" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Tests.RatingControllerTests/&lt;GetAllRatings_ShouldReturnOkResult_WithListOfRatings&gt;d__4" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+>>>>>>> feature_US-3_Rating
           <methods>
             <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
@@ -2842,7 +3398,19 @@
                 <line number="42" hits="1" branch="False" />
                 <line number="43" hits="1" branch="False" />
                 <line number="44" hits="1" branch="False" />
+<<<<<<< HEAD
                 <line number="45" hits="1" branch="False" />
+=======
+                <line number="46" hits="1" branch="False" />
+                <line number="47" hits="1" branch="False" />
+                <line number="48" hits="1" branch="False" />
+                <line number="49" hits="1" branch="False" />
+                <line number="50" hits="1" branch="False" />
+                <line number="51" hits="1" branch="False" />
+                <line number="52" hits="1" branch="False" />
+                <line number="53" hits="1" branch="False" />
+                <line number="54" hits="1" branch="False" />
+>>>>>>> feature_US-3_Rating
               </lines>
             </method>
           </methods>
@@ -2859,6 +3427,7 @@
             <line number="42" hits="1" branch="False" />
             <line number="43" hits="1" branch="False" />
             <line number="44" hits="1" branch="False" />
+<<<<<<< HEAD
             <line number="45" hits="1" branch="False" />
           </lines>
         </class>
@@ -2869,6 +3438,68 @@
                 <line number="127" hits="1" branch="False" />
                 <line number="129" hits="1" branch="False" />
                 <line number="130" hits="1" branch="False" />
+=======
+            <line number="46" hits="1" branch="False" />
+            <line number="47" hits="1" branch="False" />
+            <line number="48" hits="1" branch="False" />
+            <line number="49" hits="1" branch="False" />
+            <line number="50" hits="1" branch="False" />
+            <line number="51" hits="1" branch="False" />
+            <line number="52" hits="1" branch="False" />
+            <line number="53" hits="1" branch="False" />
+            <line number="54" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Tests.RatingControllerTests/&lt;UpdateRating_ShouldReturnNotFound_WhenRatingDoesNotExist&gt;d__9" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="151" hits="1" branch="False" />
+                <line number="153" hits="1" branch="False" />
+                <line number="154" hits="1" branch="False" />
+                <line number="156" hits="1" branch="False" />
+                <line number="159" hits="1" branch="False" />
+                <line number="162" hits="1" branch="False" />
+                <line number="163" hits="1" branch="False" />
+                <line number="164" hits="1" branch="False" />
+                <line number="165" hits="1" branch="False" />
+                <line number="166" hits="1" branch="False" />
+                <line number="167" hits="1" branch="False" />
+                <line number="168" hits="1" branch="False" />
+                <line number="169" hits="1" branch="False" />
+                <line number="170" hits="1" branch="False" />
+                <line number="171" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="151" hits="1" branch="False" />
+            <line number="153" hits="1" branch="False" />
+            <line number="154" hits="1" branch="False" />
+            <line number="156" hits="1" branch="False" />
+            <line number="159" hits="1" branch="False" />
+            <line number="162" hits="1" branch="False" />
+            <line number="163" hits="1" branch="False" />
+            <line number="164" hits="1" branch="False" />
+            <line number="165" hits="1" branch="False" />
+            <line number="166" hits="1" branch="False" />
+            <line number="167" hits="1" branch="False" />
+            <line number="168" hits="1" branch="False" />
+            <line number="169" hits="1" branch="False" />
+            <line number="170" hits="1" branch="False" />
+            <line number="171" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="P7CreateRestApi.Tests.RatingControllerTests/&lt;UpdateRating_ShouldReturnOkResult_WhenRatingIsUpdated&gt;d__8" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\RatingControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="125" hits="1" branch="False" />
+                <line number="127" hits="1" branch="False" />
+                <line number="128" hits="1" branch="False" />
+                <line number="129" hits="1" branch="False" />
+                <line number="131" hits="1" branch="False" />
+>>>>>>> feature_US-3_Rating
                 <line number="132" hits="1" branch="False" />
                 <line number="135" hits="1" branch="False" />
                 <line number="138" hits="1" branch="False" />
@@ -2885,9 +3516,17 @@
             </method>
           </methods>
           <lines>
+<<<<<<< HEAD
             <line number="127" hits="1" branch="False" />
             <line number="129" hits="1" branch="False" />
             <line number="130" hits="1" branch="False" />
+=======
+            <line number="125" hits="1" branch="False" />
+            <line number="127" hits="1" branch="False" />
+            <line number="128" hits="1" branch="False" />
+            <line number="129" hits="1" branch="False" />
+            <line number="131" hits="1" branch="False" />
+>>>>>>> feature_US-3_Rating
             <line number="132" hits="1" branch="False" />
             <line number="135" hits="1" branch="False" />
             <line number="138" hits="1" branch="False" />
@@ -2902,6 +3541,7 @@
             <line number="147" hits="1" branch="False" />
           </lines>
         </class>
+<<<<<<< HEAD
         <class name="P7CreateRestApi.Tests.CurveControllerTests/&lt;UpdateCurvePoint_ShouldReturnOkResult_WhenCurvePointIsUpdated&gt;d__8" filename="source\repos\Back-end.NET_API_REST\P7CreateRestApi.Tests\CurveControllerTests.cs" line-rate="1" branch-rate="1" complexity="1">
           <methods>
             <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
@@ -2930,6 +3570,8 @@
             <line number="123" hits="1" branch="False" />
           </lines>
         </class>
+=======
+>>>>>>> feature_US-3_Rating
       </classes>
     </package>
   </packages>
