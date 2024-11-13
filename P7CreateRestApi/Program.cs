@@ -4,6 +4,7 @@ using P7CreateRestApi.Repositories.Interface;
 using P7CreateRestApi.Repositories;
 using P7CreateRestApi.Services.Interface;
 using P7CreateRestApi.Services;
+using Dot.Net.WebApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -27,7 +28,11 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IRuleNameRepository, RuleNameRepository>();
 builder.Services.AddScoped<IRuleNameService, RuleNameService>();
 builder.Services.AddScoped<ITradeRepository, TradeRepository>();
+<<<<<<< HEAD
 builder.Services.AddScoped<ITradeService, TradeService>();
+=======
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+>>>>>>> feature_US-6_User
 
 var app = builder.Build();
 
