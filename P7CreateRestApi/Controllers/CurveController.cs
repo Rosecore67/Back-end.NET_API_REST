@@ -1,58 +1,124 @@
 using Dot.Net.WebApi.Domain;
 using Microsoft.AspNetCore.Mvc;
+using P7CreateRestApi.Models.DTOs.CurveDTOs;
+using P7CreateRestApi.Services.Interface;
+using System.Security.Cryptography;
 
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CurveController : ControllerBase
     {
-        // TODO: Inject Curve Point service
+        private readonly ICurvePointService _curvePointService;
+        private readonly ILogger<CurveController> _logger;
 
-        [HttpGet]
-        [Route("list")]
-        public IActionResult Home()
+        public CurveController(ICurvePointService curvePointService, ILogger<CurveController> logger)
         {
-            return Ok();
+            _curvePointService = curvePointService;
+            _logger = logger;
         }
 
-        [HttpGet]
-        [Route("add")]
-        public IActionResult AddCurvePoint([FromBody]CurvePoint curvePoint)
+        // GET: api/curve/list
+        [HttpGet("list")]
+        public async Task<IActionResult> GetAllCurvePoints()
         {
-            return Ok();
+            _logger.LogInformation("Received request to GET all curves at {Time}", DateTime.UtcNow);
+            var curvePoints = await _curvePointService.GetAllCurvePointsAsync();
+
+            if(!curvePoints.Any())
+            {
+                _logger.LogWarning("No curves found at {Time}", DateTime.UtcNow);
+            }
+            else
+            {
+                _logger.LogInformation("Fetched {Count} curves at {Time}", curvePoints.Count(), DateTime.UtcNow);
+            }
+
+            var curvePointDtos = curvePoints.Select(cp => new CurvePointDTO
+            {
+                Id = cp.Id,
+                CurveId = cp.CurveId,
+                AsOfDate = cp.AsOfDate,
+                Term = cp.Term,
+                CurvePointValue = cp.CurvePointValue,
+                CreationDate = cp.CreationDate
+            }).ToList();
+
+            return Ok(curvePointDtos);
         }
 
-        //[HttpGet]
-        //[Route("validate")]
-        //public IActionResult Validate([FromBody]CurvePoint curvePoint)
-        //{
-        //    // TODO: check data valid and save to db, after saving return bid list
-        //    return Ok();
-        //}
-
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
+        //POST: api/curve/add
+        [HttpPost("add")]
+        public async Task<IActionResult> AddCurvePoint([FromBody] CurvePointCreateDTO curvePointCreateDto)
         {
-            // TODO: get CurvePoint by Id and to model then show to the form
-            return Ok();
+            _logger.LogInformation("Received request  to CREATE a new curve at {Time}", DateTime.UtcNow);
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for AddCurvePoint request at {Time}", DateTime.UtcNow);
+                return BadRequest(ModelState);
+            }
+
+            var curvePoint = new CurvePoint
+            {
+                CurveId = curvePointCreateDto.CurveId,
+                AsOfDate = curvePointCreateDto.AsOfDate,
+                Term = curvePointCreateDto.Term,
+                CurvePointValue = curvePointCreateDto.CurvePointValue
+            };
+
+            var createdCurvePoint = await _curvePointService.CreateCurvePointAsync(curvePoint);
+
+            _logger.LogInformation("Created curve with ID {CurveId} at {Time}", createdCurvePoint.Id, DateTime.UtcNow);
+
+            return CreatedAtAction(nameof(GetAllCurvePoints), new { id = createdCurvePoint.Id }, createdCurvePoint);
         }
 
-        [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateCurvePoint(int id, [FromBody] CurvePoint curvePoint)
+        //PUT: api/curve/update/{id}
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateCurvePoint(int id, [FromBody] CurvePointUpdateDTO curvePointUpdateDto)
         {
-            // TODO: check required fields, if valid call service to update Curve and return Curve list
-            return Ok();
+            _logger.LogInformation("Received request to UPDATE bid with ID {CurveId} at {Time}", id, DateTime.UtcNow);
+
+            var existingCurvePoint = await _curvePointService.GetCurvePointByIdAsync(id);
+
+            if (existingCurvePoint == null)
+            {
+                _logger.LogWarning("Curve with ID {CurveId} not found for update at {Time}", id, DateTime.UtcNow);
+                return NotFound();
+            }
+
+            existingCurvePoint.CurveId = curvePointUpdateDto.CurveId;
+            existingCurvePoint.AsOfDate = curvePointUpdateDto.AsOfDate;
+            existingCurvePoint.Term = curvePointUpdateDto.Term;
+            existingCurvePoint.CurvePointValue = curvePointUpdateDto.CurvePointValue;
+
+            await _curvePointService.UpdateCurvePointAsync(id, existingCurvePoint);
+
+            _logger.LogInformation("Updated curve with ID {CurveId} at {Time}", id, DateTime.UtcNow);
+
+            return Ok(existingCurvePoint);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteBid(int id)
+        //DELETE: api/curve/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCurvePoint(int id)
         {
-            // TODO: Find Curve by Id and delete the Curve, return to Curve list
-            return Ok();
+            _logger.LogInformation("Received request to DELETE curve with ID {CurveId} at {Time}", id, DateTime.UtcNow);
+
+            var curvePoint = await _curvePointService.GetCurvePointByIdAsync(id);
+            if (curvePoint == null)
+            {
+                _logger.LogWarning("Curve with ID {CurveId} not found for deletion at {Time}", id, DateTime.UtcNow);
+                return NotFound();
+            }
+
+            await _curvePointService.DeleteCurvePointAsync(id);
+            _logger.LogInformation("Deleted curve with ID {CurveId} at {Time}", id, DateTime.UtcNow);
+
+
+            return NoContent();
         }
     }
 }
