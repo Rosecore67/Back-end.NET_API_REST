@@ -1,58 +1,121 @@
 using Microsoft.AspNetCore.Mvc;
+using P7CreateRestApi.Models.DTOs.RuleNameDTOs;
+using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class RuleNameController : ControllerBase
     {
-        // TODO: Inject RuleName service
+        private readonly IRuleNameService _ruleNameService;
+        private readonly ILogger<RuleNameController> _logger;
 
-        [HttpGet]
-        [Route("list")]
-        public IActionResult Home()
+        public RuleNameController(IRuleNameService ruleNameService, ILogger<RuleNameController> logger)
         {
-            // TODO: find all RuleName, add to model
-            return Ok();
+            _ruleNameService = ruleNameService;
+            _logger = logger;
         }
 
-        [HttpGet]
-        [Route("add")]
-        public IActionResult AddRuleName([FromBody]RuleName trade)
+        // GET: api/rulename/list
+        [HttpGet("list")]
+        public async Task<IActionResult> GetAllRuleNames()
         {
-            return Ok();
+            _logger.LogInformation("Received request to GET all rule names");
+            var ruleNames = await _ruleNameService.GetAllRuleNamesAsync();
+
+            if (!ruleNames.Any())
+            {
+                _logger.LogWarning("No rule names found");
+            }
+
+            var ruleNameDtos = ruleNames.Select(r => new RuleNameDTO
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Description = r.Description,
+                Json = r.Json,
+                Template = r.Template,
+                SqlStr = r.SqlStr,
+                SqlPart = r.SqlPart
+            }).ToList();
+
+            return Ok(ruleNameDtos);
         }
 
-        [HttpGet]
-        [Route("validate")]
-        public IActionResult Validate([FromBody]RuleName trade)
+        // POST: api/rulename/add
+        [HttpPost("add")]
+        public async Task<IActionResult> AddRuleName([FromBody] RuleNameCreateDTO ruleNameCreateDto)
         {
-            // TODO: check data valid and save to db, after saving return RuleName list
-            return Ok();
+            _logger.LogInformation("Received request to CREATE a new rule name");
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for AddRuleName request");
+                return BadRequest(ModelState);
+            }
+
+            var ruleName = new RuleName
+            {
+                Name = ruleNameCreateDto.Name,
+                Description = ruleNameCreateDto.Description,
+                Json = ruleNameCreateDto.Json,
+                Template = ruleNameCreateDto.Template,
+                SqlStr = ruleNameCreateDto.SqlStr,
+                SqlPart = ruleNameCreateDto.SqlPart
+            };
+
+            var createdRuleName = await _ruleNameService.CreateRuleNameAsync(ruleName);
+
+            _logger.LogInformation("Created rule name with ID {RuleNameId}", createdRuleName.Id);
+
+            return CreatedAtAction(nameof(GetAllRuleNames), new { id = createdRuleName.Id }, createdRuleName);
         }
 
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
+        // PUT: api/rulename/update/{id}
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateRuleName(int id, [FromBody] RuleNameUpdateDTO ruleNameUpdateDto)
         {
-            // TODO: get RuleName by Id and to model then show to the form
-            return Ok();
+            _logger.LogInformation("Received request to UPDATE rule name with ID {RuleNameId}", id);
+
+            var existingRuleName = await _ruleNameService.GetRuleNameByIdAsync(id);
+            if (existingRuleName == null)
+            {
+                _logger.LogWarning("Rule name with ID {RuleNameId} not found for update", id);
+                return NotFound();
+            }
+
+            existingRuleName.Name = ruleNameUpdateDto.Name;
+            existingRuleName.Description = ruleNameUpdateDto.Description;
+            existingRuleName.Json = ruleNameUpdateDto.Json;
+            existingRuleName.Template = ruleNameUpdateDto.Template;
+            existingRuleName.SqlStr = ruleNameUpdateDto.SqlStr;
+            existingRuleName.SqlPart = ruleNameUpdateDto.SqlPart;
+
+            var updatedRuleName = await _ruleNameService.UpdateRuleNameAsync(id, existingRuleName);
+
+            _logger.LogInformation("Updated rule name with ID {RuleNameId}", id);
+
+            return Ok(updatedRuleName);
         }
 
-        [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateRuleName(int id, [FromBody] RuleName rating)
+        // DELETE: api/rulename/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRuleName(int id)
         {
-            // TODO: check required fields, if valid call service to update RuleName and return RuleName list
-            return Ok();
-        }
+            _logger.LogInformation("Received request to DELETE rule name with ID {RuleNameId}", id);
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteRuleName(int id)
-        {
-            // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
-            return Ok();
+            var ruleName = await _ruleNameService.GetRuleNameByIdAsync(id);
+            if (ruleName == null)
+            {
+                _logger.LogWarning("Rule name with ID {RuleNameId} not found for deletion", id);
+                return NotFound();
+            }
+
+            await _ruleNameService.DeleteRuleNameAsync(id);
+            _logger.LogInformation("Deleted rule name with ID {RuleNameId}", id);
+
+            return NoContent();
         }
     }
 }
