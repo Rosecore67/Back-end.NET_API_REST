@@ -11,6 +11,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# files
+
+/P7CreateRestApi.Tests/bin/Debug/net6.0/fine-code-coverage
+
 # Editor directories and files
 .idea
 *.suo
