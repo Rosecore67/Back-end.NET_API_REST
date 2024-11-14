@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Controllers.Domain;
 using Dot.Net.WebApi.Controllers;
 
 namespace Dot.Net.WebApi.Data
 {
-    public class LocalDbContext : DbContext
+    public class LocalDbContext : IdentityDbContext<User>
     {
         public LocalDbContext(DbContextOptions<LocalDbContext> options) : base(options) { }
 
