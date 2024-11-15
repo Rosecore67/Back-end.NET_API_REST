@@ -1,4 +1,5 @@
 ﻿using Dot.Net.WebApi.Domain;
+using Microsoft.AspNetCore.Identity;
 using P7CreateRestApi.Repositories.Interface;
 using P7CreateRestApi.Services.Interface;
 
@@ -6,33 +7,32 @@ namespace P7CreateRestApi.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(UserManager<User> userManager)
         {
-            _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            return await _userRepository.GetAllAsync();
+            return _userManager.Users.ToList();
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserByIdAsync(string id)
         {
-            return await _userRepository.GetByIdAsync(id);
+            return await _userManager.FindByIdAsync(id);
         }
 
-        public async Task<User> CreateUserAsync(User user)
+        public async Task<User> CreateUserAsync(User user, string password)
         {
-            // Logique supplémentaire, comme le hachage du mot de passe, pourrait être ajoutée ici.
-            await _userRepository.AddAsync(user);
-            return user;
+            var result = await _userManager.CreateAsync(user, password);
+            return result.Succeeded ? user : null;
         }
 
-        public async Task<User> UpdateUserAsync(int id, User user)
+        public async Task<User> UpdateUserAsync(string id, User user)
         {
-            var existingUser = await _userRepository.GetByIdAsync(id);
+            var existingUser = await _userManager.FindByIdAsync(id);
             if (existingUser == null) return null;
 
             existingUser.UserName = user.UserName;
@@ -40,22 +40,32 @@ namespace P7CreateRestApi.Services
             existingUser.Fullname = user.Fullname;
             existingUser.Role = user.Role;
 
-            await _userRepository.UpdateAsync(existingUser);
-            return existingUser;
+            var result = await _userManager.UpdateAsync(existingUser);
+            return result.Succeeded ? existingUser : null;
         }
 
-        public async Task<bool> DeleteUserAsync(int id)
+        public async Task<bool> DeleteUserAsync(string id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null) return false;
 
-            await _userRepository.DeleteAsync(user);
-            return true;
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
         }
 
-        public User FindByUserName(string userName)
+        public async Task<User> FindByUserNameAsync(string userName)
         {
-            return _userRepository.FindByUserName(userName);
+            return await _userManager.FindByNameAsync(userName);
+        }
+
+        public async Task<User> AuthenticateAsync(string username, string password)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user != null && await _userManager.CheckPasswordAsync(user, password))
+            {
+                return user;
+            }
+            return null;
         }
     }
 }

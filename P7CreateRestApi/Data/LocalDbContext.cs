@@ -15,7 +15,7 @@ namespace Dot.Net.WebApi.Data
             base.OnModelCreating(builder);
         }
 
-        public DbSet<User> Users { get; set;}
+        public new DbSet<User> Users { get; set;}
         public DbSet<BidList> Bids { get; set;}
         public DbSet<CurvePoint> CurvePoints { get; set;}
         public DbSet<Rating> Rating { get; set;}

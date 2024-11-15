@@ -1,28 +1,36 @@
 using Dot.Net.WebApi.Domain;
-using Dot.Net.WebApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using P7CreateRestApi.Models;
 using P7CreateRestApi.Models.DTOs.UserDTOs;
-using P7CreateRestApi.Services.Interface;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Dot.Net.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public UserController(IUserService userService)
+        public UserController(UserManager<User> userManager, IConfiguration configuration)
         {
-            _userService = userService;
+            _userManager = userManager;
+            _configuration = configuration;
         }
 
         // GET: api/user/list
+        [Authorize(Roles = "Admin")]
         [HttpGet("list")]
-        public async Task<IActionResult> GetAllUsers()
+        public IActionResult GetAllUsers()
         {
-            var users = await _userService.GetAllUsersAsync();
-            var userDtos = users.Select(u => new UserDTO
+            var users = _userManager.Users.Select(u => new UserDTO
             {
                 Id = u.Id,
                 UserName = u.UserName,
@@ -31,109 +39,82 @@ namespace Dot.Net.WebApi.Controllers
                 Role = u.Role
             }).ToList();
 
-            return Ok(userDtos);
+            return Ok(users);
         }
 
-        // POST: api/user/add
-        [HttpPost("add")]
-        public async Task<IActionResult> AddUser([FromBody] UserCreateDTO userCreateDto)
+        // POST: api/user/register
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] UserCreateDTO userCreateDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var user = new User
             {
                 UserName = userCreateDto.UserName,
                 Email = userCreateDto.Email,
-                Password = userCreateDto.Password, // Note : Dans une application réelle, assurez-vous de hacher le mot de passe
                 Fullname = userCreateDto.Fullname,
                 Role = userCreateDto.Role
             };
 
-            var createdUser = await _userService.CreateUserAsync(user);
+            var result = await _userManager.CreateAsync(user, userCreateDto.Password);
+            if (!result.Succeeded) return BadRequest(result.Errors);
 
-            var createdUserDto = new UserDTO
-            {
-                Id = createdUser.Id,
-                UserName = createdUser.UserName,
-                Email = createdUser.Email,
-                Fullname = createdUser.Fullname,
-                Role = createdUser.Role
-            };
-
-            return CreatedAtAction(nameof(GetAllUsers), new { id = createdUserDto.Id }, createdUserDto);
+            return Ok(new { user.Id, user.UserName, user.Email });
         }
 
-        // PUT: api/user/update/{id}
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDTO userUpdateDto)
+        // POST: api/user/login
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindByNameAsync(loginModel.Username);
+            if (user != null && await _userManager.CheckPasswordAsync(user, loginModel.Password))
             {
-                return BadRequest(ModelState);
+                var token = GenerateJwtToken(user);
+                return Ok(new { Token = token });
             }
 
-            var existingUser = await _userService.GetUserByIdAsync(id);
-            if (existingUser == null)
-            {
-                return NotFound($"User with ID {id} not found.");
-            }
-
-            existingUser.UserName = userUpdateDto.UserName;
-            existingUser.Email = userUpdateDto.Email;
-            existingUser.Fullname = userUpdateDto.Fullname;
-            existingUser.Role = userUpdateDto.Role;
-
-            var updatedUser = await _userService.UpdateUserAsync(id, existingUser);
-
-            var updatedUserDto = new UserDTO
-            {
-                Id = updatedUser.Id,
-                UserName = updatedUser.UserName,
-                Email = updatedUser.Email,
-                Fullname = updatedUser.Fullname,
-                Role = updatedUser.Role
-            };
-
-            return Ok(updatedUserDto);
+            return Unauthorized("Invalid username or password");
         }
 
-        // DELETE: api/user/{id}
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        // DELETE: api/user/delete/{id}
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound($"User with ID {id} not found.");
-            }
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound($"User with ID {id} not found.");
 
-            var deleted = await _userService.DeleteUserAsync(id);
-            if (!deleted)
-            {
-                return StatusCode(500, "An error occurred while deleting the user.");
-            }
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded) return StatusCode(500, "An error occurred while deleting the user.");
 
             return NoContent();
         }
 
-        // GET: api/user/secure/article-details
-        [HttpGet("secure/article-details")]
-        public async Task<ActionResult<List<UserDTO>>> GetAllUserArticles()
+        private string GenerateJwtToken(User user)
         {
-            var users = await _userService.GetAllUsersAsync();
-            var userDtos = users.Select(u => new UserDTO
+            var claims = new[]
             {
-                Id = u.Id,
-                UserName = u.UserName,
-                Email = u.Email,
-                Fullname = u.Fullname,
-                Role = u.Role
-            }).ToList();
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Role, user.Role)
+        };
 
-            return Ok(userDtos);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
