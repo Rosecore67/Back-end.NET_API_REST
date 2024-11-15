@@ -1,7 +1,14 @@
-﻿namespace P7CreateRestApi.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace P7CreateRestApi.Models
 {
     public class LoginModel
     {
-        // TODO: implement properties needeed for login model.
+        [Required]
+        public string Username { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
     }
 }
