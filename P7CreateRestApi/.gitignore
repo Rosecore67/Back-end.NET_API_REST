@@ -21,6 +21,7 @@ yarn-error.log*
 
 # Fine Code Coverage
 **/fine-code-coverage/
+**/fine-code-coverage/**
 
 # Editor directories and files
 .idea
