@@ -13,10 +13,14 @@ yarn-error.log*
 
 # files
 
+/P7CreateRestApi.Tests/bin/Debug/net6.0/fine-code-coverage
 /P7CreateRestApi.Tests/bin
 /P7CreateRestApi.Tests/obj
 /P7CreateRestApi/appsettings.cs
 /P7CreateRestApi/packages
+
+# Fine Code Coverage
+**/fine-code-coverage/
 
 # Editor directories and files
 .idea
