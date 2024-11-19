@@ -13,8 +13,8 @@ yarn-error.log*
 
 # files
 
-/P7CreateRestApi.Tests/bin
-/P7CreateRestApi.Tests/obj
+/P7CreateRestApi.Tests/bin/
+/P7CreateRestApi.Tests/obj/
 /P7CreateRestApi/appsettings.cs
 /P7CreateRestApi/packages
 
