@@ -22,25 +22,34 @@ namespace Dot.Net.WebApi.Controllers
         public async Task<IActionResult> GetAllRuleNames()
         {
             _logger.LogInformation("Received request to GET all rule names");
-            var ruleNames = await _ruleNameService.GetAllRuleNamesAsync();
 
-            if (!ruleNames.Any())
+            try
             {
-                _logger.LogWarning("No rule names found");
+                var ruleNames = await _ruleNameService.GetAllRuleNamesAsync();
+
+                if (!ruleNames.Any())
+                {
+                    _logger.LogWarning("No rule names found");
+                }
+
+                var ruleNameDtos = ruleNames.Select(r => new RuleNameDTO
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    Json = r.Json,
+                    Template = r.Template,
+                    SqlStr = r.SqlStr,
+                    SqlPart = r.SqlPart
+                }).ToList();
+
+                return Ok(ruleNameDtos);
             }
-
-            var ruleNameDtos = ruleNames.Select(r => new RuleNameDTO
+            catch (Exception ex)
             {
-                Id = r.Id,
-                Name = r.Name,
-                Description = r.Description,
-                Json = r.Json,
-                Template = r.Template,
-                SqlStr = r.SqlStr,
-                SqlPart = r.SqlPart
-            }).ToList();
-
-            return Ok(ruleNameDtos);
+                _logger.LogError(ex, "An error occurred while retrieving all rule names");
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // POST: api/rulename/add
@@ -49,27 +58,35 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to CREATE a new rule name");
 
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogWarning("Invalid model state for AddRuleName request");
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning("Invalid model state for AddRuleName request");
+                    return BadRequest(ModelState);
+                }
+
+                var ruleName = new RuleName
+                {
+                    Name = ruleNameCreateDto.Name,
+                    Description = ruleNameCreateDto.Description,
+                    Json = ruleNameCreateDto.Json,
+                    Template = ruleNameCreateDto.Template,
+                    SqlStr = ruleNameCreateDto.SqlStr,
+                    SqlPart = ruleNameCreateDto.SqlPart
+                };
+
+                var createdRuleName = await _ruleNameService.CreateRuleNameAsync(ruleName);
+
+                _logger.LogInformation("Created rule name with ID {RuleNameId}", createdRuleName.Id);
+
+                return CreatedAtAction(nameof(GetAllRuleNames), new { id = createdRuleName.Id }, createdRuleName);
             }
-
-            var ruleName = new RuleName
+            catch (Exception ex)
             {
-                Name = ruleNameCreateDto.Name,
-                Description = ruleNameCreateDto.Description,
-                Json = ruleNameCreateDto.Json,
-                Template = ruleNameCreateDto.Template,
-                SqlStr = ruleNameCreateDto.SqlStr,
-                SqlPart = ruleNameCreateDto.SqlPart
-            };
-
-            var createdRuleName = await _ruleNameService.CreateRuleNameAsync(ruleName);
-
-            _logger.LogInformation("Created rule name with ID {RuleNameId}", createdRuleName.Id);
-
-            return CreatedAtAction(nameof(GetAllRuleNames), new { id = createdRuleName.Id }, createdRuleName);
+                _logger.LogError(ex, "An error occurred while creating a new rule name");
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // PUT: api/rulename/update/{id}
@@ -78,25 +95,33 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to UPDATE rule name with ID {RuleNameId}", id);
 
-            var existingRuleName = await _ruleNameService.GetRuleNameByIdAsync(id);
-            if (existingRuleName == null)
+            try
             {
-                _logger.LogWarning("Rule name with ID {RuleNameId} not found for update", id);
-                return NotFound();
+                var existingRuleName = await _ruleNameService.GetRuleNameByIdAsync(id);
+                if (existingRuleName == null)
+                {
+                    _logger.LogWarning("Rule name with ID {RuleNameId} not found for update", id);
+                    return NotFound();
+                }
+
+                existingRuleName.Name = ruleNameUpdateDto.Name;
+                existingRuleName.Description = ruleNameUpdateDto.Description;
+                existingRuleName.Json = ruleNameUpdateDto.Json;
+                existingRuleName.Template = ruleNameUpdateDto.Template;
+                existingRuleName.SqlStr = ruleNameUpdateDto.SqlStr;
+                existingRuleName.SqlPart = ruleNameUpdateDto.SqlPart;
+
+                var updatedRuleName = await _ruleNameService.UpdateRuleNameAsync(id, existingRuleName);
+
+                _logger.LogInformation("Updated rule name with ID {RuleNameId}", id);
+
+                return Ok(updatedRuleName);
             }
-
-            existingRuleName.Name = ruleNameUpdateDto.Name;
-            existingRuleName.Description = ruleNameUpdateDto.Description;
-            existingRuleName.Json = ruleNameUpdateDto.Json;
-            existingRuleName.Template = ruleNameUpdateDto.Template;
-            existingRuleName.SqlStr = ruleNameUpdateDto.SqlStr;
-            existingRuleName.SqlPart = ruleNameUpdateDto.SqlPart;
-
-            var updatedRuleName = await _ruleNameService.UpdateRuleNameAsync(id, existingRuleName);
-
-            _logger.LogInformation("Updated rule name with ID {RuleNameId}", id);
-
-            return Ok(updatedRuleName);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating the rule name with ID {RuleNameId}", id);
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // DELETE: api/rulename/{id}
@@ -105,17 +130,25 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to DELETE rule name with ID {RuleNameId}", id);
 
-            var ruleName = await _ruleNameService.GetRuleNameByIdAsync(id);
-            if (ruleName == null)
+            try
             {
-                _logger.LogWarning("Rule name with ID {RuleNameId} not found for deletion", id);
-                return NotFound();
+                var ruleName = await _ruleNameService.GetRuleNameByIdAsync(id);
+                if (ruleName == null)
+                {
+                    _logger.LogWarning("Rule name with ID {RuleNameId} not found for deletion", id);
+                    return NotFound();
+                }
+
+                await _ruleNameService.DeleteRuleNameAsync(id);
+                _logger.LogInformation("Deleted rule name with ID {RuleNameId}", id);
+
+                return NoContent();
             }
-
-            await _ruleNameService.DeleteRuleNameAsync(id);
-            _logger.LogInformation("Deleted rule name with ID {RuleNameId}", id);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting the rule name with ID {RuleNameId}", id);
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
     }
 }

@@ -23,23 +23,32 @@ namespace Dot.Net.WebApi.Controllers
         public async Task<IActionResult> GetAllRatings()
         {
             _logger.LogInformation("Received request to GET all ratings");
-            var ratings = await _ratingService.GetAllRatingsAsync();
 
-            if (!ratings.Any())
+            try
             {
-                _logger.LogWarning("No ratings found");
+                var ratings = await _ratingService.GetAllRatingsAsync();
+
+                if (!ratings.Any())
+                {
+                    _logger.LogWarning("No ratings found");
+                }
+
+                var ratingDtos = ratings.Select(r => new RatingDTO
+                {
+                    Id = r.Id,
+                    MoodysRating = r.MoodysRating,
+                    SandPRating = r.SandPRating,
+                    FitchRating = r.FitchRating,
+                    OrderNumber = r.OrderNumber
+                }).ToList();
+
+                return Ok(ratingDtos);
             }
-
-            var ratingDtos = ratings.Select(r => new RatingDTO
+            catch (Exception ex)
             {
-                Id = r.Id,
-                MoodysRating = r.MoodysRating,
-                SandPRating = r.SandPRating,
-                FitchRating = r.FitchRating,
-                OrderNumber = r.OrderNumber
-            }).ToList();
-
-            return Ok(ratingDtos);
+                _logger.LogError(ex, "An error occurred while retrieving ratings");
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // POST: api/rating/add
@@ -48,25 +57,33 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to CREATE a new rating");
 
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogWarning("Invalid model state for AddRating request");
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning("Invalid model state for AddRating request");
+                    return BadRequest(ModelState);
+                }
+
+                var rating = new Rating
+                {
+                    MoodysRating = ratingCreateDto.MoodysRating,
+                    SandPRating = ratingCreateDto.SandPRating,
+                    FitchRating = ratingCreateDto.FitchRating,
+                    OrderNumber = ratingCreateDto.OrderNumber
+                };
+
+                var createdRating = await _ratingService.CreateRatingAsync(rating);
+
+                _logger.LogInformation("Created rating with ID {RatingId}", createdRating.Id);
+
+                return CreatedAtAction(nameof(GetAllRatings), new { id = createdRating.Id }, createdRating);
             }
-
-            var rating = new Rating
+            catch (Exception ex)
             {
-                MoodysRating = ratingCreateDto.MoodysRating,
-                SandPRating = ratingCreateDto.SandPRating,
-                FitchRating = ratingCreateDto.FitchRating,
-                OrderNumber = ratingCreateDto.OrderNumber
-            };
-
-            var createdRating = await _ratingService.CreateRatingAsync(rating);
-
-            _logger.LogInformation("Created rating with ID {RatingId}", createdRating.Id);
-
-            return CreatedAtAction(nameof(GetAllRatings), new { id = createdRating.Id }, createdRating);
+                _logger.LogError(ex, "An error occurred while creating a new rating");
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // PUT: api/rating/update/{id}
@@ -75,23 +92,31 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to UPDATE rating with ID {RatingId}", id);
 
-            var existingRating = await _ratingService.GetRatingByIdAsync(id);
-            if (existingRating == null)
+            try
             {
-                _logger.LogWarning("Rating with ID {RatingId} not found for update", id);
-                return NotFound();
+                var existingRating = await _ratingService.GetRatingByIdAsync(id);
+                if (existingRating == null)
+                {
+                    _logger.LogWarning("Rating with ID {RatingId} not found for update", id);
+                    return NotFound();
+                }
+
+                existingRating.MoodysRating = ratingUpdateDto.MoodysRating;
+                existingRating.SandPRating = ratingUpdateDto.SandPRating;
+                existingRating.FitchRating = ratingUpdateDto.FitchRating;
+                existingRating.OrderNumber = ratingUpdateDto.OrderNumber;
+
+                var updatedRating = await _ratingService.UpdateRatingAsync(id, existingRating);
+
+                _logger.LogInformation("Updated rating with ID {RatingId}", id);
+
+                return Ok(updatedRating);
             }
-
-            existingRating.MoodysRating = ratingUpdateDto.MoodysRating;
-            existingRating.SandPRating = ratingUpdateDto.SandPRating;
-            existingRating.FitchRating = ratingUpdateDto.FitchRating;
-            existingRating.OrderNumber = ratingUpdateDto.OrderNumber;
-
-            var updatedRating = await _ratingService.UpdateRatingAsync(id, existingRating);
-
-            _logger.LogInformation("Updated rating with ID {RatingId}", id);
-
-            return Ok(updatedRating);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating the rating with ID {RatingId}", id);
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // DELETE: api/rating/{id}
@@ -100,17 +125,25 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to DELETE rating with ID {RatingId}", id);
 
-            var rating = await _ratingService.GetRatingByIdAsync(id);
-            if (rating == null)
+            try
             {
-                _logger.LogWarning("Rating with ID {RatingId} not found for deletion", id);
-                return NotFound();
+                var rating = await _ratingService.GetRatingByIdAsync(id);
+                if (rating == null)
+                {
+                    _logger.LogWarning("Rating with ID {RatingId} not found for deletion", id);
+                    return NotFound();
+                }
+
+                await _ratingService.DeleteRatingAsync(id);
+                _logger.LogInformation("Deleted rating with ID {RatingId}", id);
+
+                return NoContent();
             }
-
-            await _ratingService.DeleteRatingAsync(id);
-            _logger.LogInformation("Deleted rating with ID {RatingId}", id);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting the rating with ID {RatingId}", id);
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
     }
 }

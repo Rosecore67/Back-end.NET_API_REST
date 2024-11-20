@@ -23,39 +23,48 @@ namespace Dot.Net.WebApi.Controllers
         public async Task<IActionResult> GetAllTrades()
         {
             _logger.LogInformation("Received request to GET all trades");
-            var trades = await _tradeService.GetAllTradesAsync();
 
-            if (!trades.Any())
+            try
             {
-                _logger.LogWarning("No trades found");
+                var trades = await _tradeService.GetAllTradesAsync();
+
+                if (!trades.Any())
+                {
+                    _logger.LogWarning("No trades found");
+                }
+
+                var tradeDtos = trades.Select(t => new TradeDTO
+                {
+                    TradeId = t.TradeId,
+                    Account = t.Account,
+                    AccountType = t.AccountType,
+                    BuyQuantity = t.BuyQuantity,
+                    SellQuantity = t.SellQuantity,
+                    BuyPrice = t.BuyPrice,
+                    SellPrice = t.SellPrice,
+                    TradeDate = t.TradeDate,
+                    TradeSecurity = t.TradeSecurity,
+                    TradeStatus = t.TradeStatus,
+                    Trader = t.Trader,
+                    Benchmark = t.Benchmark,
+                    Book = t.Book,
+                    CreationName = t.CreationName,
+                    CreationDate = t.CreationDate,
+                    RevisionName = t.RevisionName,
+                    RevisionDate = t.RevisionDate,
+                    DealName = t.DealName,
+                    DealType = t.DealType,
+                    SourceListId = t.SourceListId,
+                    Side = t.Side
+                }).ToList();
+
+                return Ok(tradeDtos);
             }
-
-            var tradeDtos = trades.Select(t => new TradeDTO
+            catch (Exception ex)
             {
-                TradeId = t.TradeId,
-                Account = t.Account,
-                AccountType = t.AccountType,
-                BuyQuantity = t.BuyQuantity,
-                SellQuantity = t.SellQuantity,
-                BuyPrice = t.BuyPrice,
-                SellPrice = t.SellPrice,
-                TradeDate = t.TradeDate,
-                TradeSecurity = t.TradeSecurity,
-                TradeStatus = t.TradeStatus,
-                Trader = t.Trader,
-                Benchmark = t.Benchmark,
-                Book = t.Book,
-                CreationName = t.CreationName,
-                CreationDate = t.CreationDate,
-                RevisionName = t.RevisionName,
-                RevisionDate = t.RevisionDate,
-                DealName = t.DealName,
-                DealType = t.DealType,
-                SourceListId = t.SourceListId,
-                Side = t.Side
-            }).ToList();
-
-            return Ok(tradeDtos);
+                _logger.LogError(ex, "An error occurred while retrieving all trades");
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // POST: api/trade/add
@@ -64,39 +73,47 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to CREATE a new trade");
 
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogWarning("Invalid model state for AddTrade request");
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning("Invalid model state for AddTrade request");
+                    return BadRequest(ModelState);
+                }
+
+                var trade = new Trade
+                {
+                    Account = tradeCreateDto.Account,
+                    AccountType = tradeCreateDto.AccountType,
+                    BuyQuantity = tradeCreateDto.BuyQuantity,
+                    SellQuantity = tradeCreateDto.SellQuantity,
+                    BuyPrice = tradeCreateDto.BuyPrice,
+                    SellPrice = tradeCreateDto.SellPrice,
+                    TradeDate = tradeCreateDto.TradeDate,
+                    TradeSecurity = tradeCreateDto.TradeSecurity,
+                    TradeStatus = tradeCreateDto.TradeStatus,
+                    Trader = tradeCreateDto.Trader,
+                    Benchmark = tradeCreateDto.Benchmark,
+                    Book = tradeCreateDto.Book,
+                    CreationName = tradeCreateDto.CreationName,
+                    RevisionName = tradeCreateDto.RevisionName,
+                    DealName = tradeCreateDto.DealName,
+                    DealType = tradeCreateDto.DealType,
+                    SourceListId = tradeCreateDto.SourceListId,
+                    Side = tradeCreateDto.Side
+                };
+
+                var createdTrade = await _tradeService.CreateTradeAsync(trade);
+
+                _logger.LogInformation("Created trade with ID {TradeId}", createdTrade.TradeId);
+
+                return CreatedAtAction(nameof(GetAllTrades), new { id = createdTrade.TradeId }, createdTrade);
             }
-
-            var trade = new Trade
+            catch (Exception ex)
             {
-                Account = tradeCreateDto.Account,
-                AccountType = tradeCreateDto.AccountType,
-                BuyQuantity = tradeCreateDto.BuyQuantity,
-                SellQuantity = tradeCreateDto.SellQuantity,
-                BuyPrice = tradeCreateDto.BuyPrice,
-                SellPrice = tradeCreateDto.SellPrice,
-                TradeDate = tradeCreateDto.TradeDate,
-                TradeSecurity = tradeCreateDto.TradeSecurity,
-                TradeStatus = tradeCreateDto.TradeStatus,
-                Trader = tradeCreateDto.Trader,
-                Benchmark = tradeCreateDto.Benchmark,
-                Book = tradeCreateDto.Book,
-                CreationName = tradeCreateDto.CreationName,
-                RevisionName = tradeCreateDto.RevisionName,
-                DealName = tradeCreateDto.DealName,
-                DealType = tradeCreateDto.DealType,
-                SourceListId = tradeCreateDto.SourceListId,
-                Side = tradeCreateDto.Side
-            };
-
-            var createdTrade = await _tradeService.CreateTradeAsync(trade);
-
-            _logger.LogInformation("Created trade with ID {TradeId}", createdTrade.TradeId);
-
-            return CreatedAtAction(nameof(GetAllTrades), new { id = createdTrade.TradeId }, createdTrade);
+                _logger.LogError(ex, "An error occurred while creating a new trade");
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // PUT: api/trade/update/{id}
@@ -105,37 +122,45 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to UPDATE trade with ID {TradeId}", id);
 
-            var existingTrade = await _tradeService.GetTradeByIdAsync(id);
-            if (existingTrade == null)
+            try
             {
-                _logger.LogWarning("Trade with ID {TradeId} not found for update", id);
-                return NotFound();
+                var existingTrade = await _tradeService.GetTradeByIdAsync(id);
+                if (existingTrade == null)
+                {
+                    _logger.LogWarning("Trade with ID {TradeId} not found for update", id);
+                    return NotFound();
+                }
+
+                existingTrade.Account = tradeUpdateDto.Account;
+                existingTrade.AccountType = tradeUpdateDto.AccountType;
+                existingTrade.BuyQuantity = tradeUpdateDto.BuyQuantity;
+                existingTrade.SellQuantity = tradeUpdateDto.SellQuantity;
+                existingTrade.BuyPrice = tradeUpdateDto.BuyPrice;
+                existingTrade.SellPrice = tradeUpdateDto.SellPrice;
+                existingTrade.TradeDate = tradeUpdateDto.TradeDate;
+                existingTrade.TradeSecurity = tradeUpdateDto.TradeSecurity;
+                existingTrade.TradeStatus = tradeUpdateDto.TradeStatus;
+                existingTrade.Trader = tradeUpdateDto.Trader;
+                existingTrade.Benchmark = tradeUpdateDto.Benchmark;
+                existingTrade.Book = tradeUpdateDto.Book;
+                existingTrade.RevisionName = tradeUpdateDto.RevisionName;
+                existingTrade.RevisionDate = tradeUpdateDto.RevisionDate;
+                existingTrade.DealName = tradeUpdateDto.DealName;
+                existingTrade.DealType = tradeUpdateDto.DealType;
+                existingTrade.SourceListId = tradeUpdateDto.SourceListId;
+                existingTrade.Side = tradeUpdateDto.Side;
+
+                var updatedTrade = await _tradeService.UpdateTradeAsync(id, existingTrade);
+
+                _logger.LogInformation("Updated trade with ID {TradeId}", id);
+
+                return Ok(updatedTrade);
             }
-
-            existingTrade.Account = tradeUpdateDto.Account;
-            existingTrade.AccountType = tradeUpdateDto.AccountType;
-            existingTrade.BuyQuantity = tradeUpdateDto.BuyQuantity;
-            existingTrade.SellQuantity = tradeUpdateDto.SellQuantity;
-            existingTrade.BuyPrice = tradeUpdateDto.BuyPrice;
-            existingTrade.SellPrice = tradeUpdateDto.SellPrice;
-            existingTrade.TradeDate = tradeUpdateDto.TradeDate;
-            existingTrade.TradeSecurity = tradeUpdateDto.TradeSecurity;
-            existingTrade.TradeStatus = tradeUpdateDto.TradeStatus;
-            existingTrade.Trader = tradeUpdateDto.Trader;
-            existingTrade.Benchmark = tradeUpdateDto.Benchmark;
-            existingTrade.Book = tradeUpdateDto.Book;
-            existingTrade.RevisionName = tradeUpdateDto.RevisionName;
-            existingTrade.RevisionDate = tradeUpdateDto.RevisionDate;
-            existingTrade.DealName = tradeUpdateDto.DealName;
-            existingTrade.DealType = tradeUpdateDto.DealType;
-            existingTrade.SourceListId = tradeUpdateDto.SourceListId;
-            existingTrade.Side = tradeUpdateDto.Side;
-
-            var updatedTrade = await _tradeService.UpdateTradeAsync(id, existingTrade);
-
-            _logger.LogInformation("Updated trade with ID {TradeId}", id);
-
-            return Ok(updatedTrade);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating the trade with ID {TradeId}", id);
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // DELETE: api/trade/{id}
@@ -144,17 +169,25 @@ namespace Dot.Net.WebApi.Controllers
         {
             _logger.LogInformation("Received request to DELETE trade with ID {TradeId}", id);
 
-            var trade = await _tradeService.GetTradeByIdAsync(id);
-            if (trade == null)
+            try
             {
-                _logger.LogWarning("Trade with ID {TradeId} not found for deletion", id);
-                return NotFound();
+                var trade = await _tradeService.GetTradeByIdAsync(id);
+                if (trade == null)
+                {
+                    _logger.LogWarning("Trade with ID {TradeId} not found for deletion", id);
+                    return NotFound();
+                }
+
+                await _tradeService.DeleteTradeAsync(id);
+                _logger.LogInformation("Deleted trade with ID {TradeId}", id);
+
+                return NoContent();
             }
-
-            await _tradeService.DeleteTradeAsync(id);
-            _logger.LogInformation("Deleted trade with ID {TradeId}", id);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting the trade with ID {TradeId}", id);
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
     }
 }
