@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Models.DTOs.RuleNameDTOs;
 using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class RuleNameController : ControllerBase
@@ -18,6 +20,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // GET: api/rulename/list
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("list")]
         public async Task<IActionResult> GetAllRuleNames()
         {
@@ -53,6 +56,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // POST: api/rulename/add
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("add")]
         public async Task<IActionResult> AddRuleName([FromBody] RuleNameCreateDTO ruleNameCreateDto)
         {
@@ -90,6 +94,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // PUT: api/rulename/update/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateRuleName(int id, [FromBody] RuleNameUpdateDTO ruleNameUpdateDto)
         {
@@ -125,6 +130,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // DELETE: api/rulename/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRuleName(int id)
         {

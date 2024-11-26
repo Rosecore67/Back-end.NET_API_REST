@@ -1,10 +1,12 @@
 using Dot.Net.WebApi.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Models.DTOs.BidListDTOs;
 using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BidListController : ControllerBase
@@ -19,10 +21,11 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // GET: api/bidlist
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BidListDTO>>> GetAllBids()
         {
-            _logger.LogInformation("Received request to GET all bids at {Time}", DateTime.UtcNow);
+            _logger.LogInformation("Received request to GET all bids at {Time}", DateTime.Now);
 
             try
             {
@@ -30,11 +33,11 @@ namespace Dot.Net.WebApi.Controllers
 
                 if (!bids.Any())
                 {
-                    _logger.LogWarning("No bids found at {Time}", DateTime.UtcNow);
+                    _logger.LogWarning("No bids found at {Time}", DateTime.Now);
                 }
                 else
                 {
-                    _logger.LogInformation("Fetched {Count} bids at {Time}", bids.Count(), DateTime.UtcNow);
+                    _logger.LogInformation("Fetched {Count} bids at {Time}", bids.Count(), DateTime.Now);
                 }
 
                 var bidDtos = bids.Select(bid => new BidListDTO
@@ -56,23 +59,24 @@ namespace Dot.Net.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving all bids at {Time}", DateTime.UtcNow);
+                _logger.LogError(ex, "An error occurred while retrieving all bids at {Time}", DateTime.Now);
                 return StatusCode(500, "An internal server error occurred. Please try again later.");
             }
         }
 
 
         // POST: api/bidlist/validate
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("validate")]
         public async Task<IActionResult> CreateBid([FromBody] BidListCreateDTO bidCreateDto)
         {
-            _logger.LogInformation("Received request to CREATE a new bid at {Time}", DateTime.UtcNow);
+            _logger.LogInformation("Received request to CREATE a new bid at {Time}", DateTime.Now);
 
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    _logger.LogWarning("Invalid model state for CreateBid request at {Time}", DateTime.UtcNow);
+                    _logger.LogWarning("Invalid model state for CreateBid request at {Time}", DateTime.Now);
                     return BadRequest(ModelState);
                 }
 
@@ -101,30 +105,31 @@ namespace Dot.Net.WebApi.Controllers
 
                 await _bidListService.CreateBidAsync(newBid);
 
-                _logger.LogInformation("Created bid with ID {BidId} at {Time}", newBid.BidListId, DateTime.UtcNow);
+                _logger.LogInformation("Created bid with ID {BidId} at {Time}", newBid.BidListId, DateTime.Now);
 
                 return CreatedAtAction(nameof(GetAllBids), new { id = newBid.BidListId }, newBid);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while creating a new bid at {Time}", DateTime.UtcNow);
+                _logger.LogError(ex, "An error occurred while creating a new bid at {Time}", DateTime.Now);
                 return StatusCode(500, "An internal server error occurred. Please try again later.");
             }
         }
 
 
         // PUT: api/bidlist/update/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateBid(int id, [FromBody] BidListUpdateDTO bidUpdateDto)
         {
-            _logger.LogInformation("Received request to UPDATE bid with ID {BidId} at {Time}", id, DateTime.UtcNow);
+            _logger.LogInformation("Received request to UPDATE bid with ID {BidId} at {Time}", id, DateTime.Now);
 
             try
             {
                 var existingBid = await _bidListService.GetBidByIdAsync(id);
                 if (existingBid == null)
                 {
-                    _logger.LogWarning("Bid with ID {BidId} not found for update at {Time}", id, DateTime.UtcNow);
+                    _logger.LogWarning("Bid with ID {BidId} not found for update at {Time}", id, DateTime.Now);
                     return NotFound();
                 }
 
@@ -137,40 +142,41 @@ namespace Dot.Net.WebApi.Controllers
 
                 await _bidListService.UpdateBidAsync(id, existingBid);
 
-                _logger.LogInformation("Updated bid with ID {BidId} at {Time}", id, DateTime.UtcNow);
+                _logger.LogInformation("Updated bid with ID {BidId} at {Time}", id, DateTime.Now);
 
                 return Ok(existingBid);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while updating the bid with ID {BidId} at {Time}", id, DateTime.UtcNow);
+                _logger.LogError(ex, "An error occurred while updating the bid with ID {BidId} at {Time}", id, DateTime.Now);
                 return StatusCode(500, "An internal server error occurred. Please try again later.");
             }
         }
 
         // DELETE: api/bidlist/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBid(int id)
         {
-            _logger.LogInformation("Received request to DELETE bid with ID {BidId} at {Time}", id, DateTime.UtcNow);
+            _logger.LogInformation("Received request to DELETE bid with ID {BidId} at {Time}", id, DateTime.Now);
 
             try
             {
                 var bid = await _bidListService.GetBidByIdAsync(id);
                 if (bid == null)
                 {
-                    _logger.LogWarning("Bid with ID {BidId} not found for deletion at {Time}", id, DateTime.UtcNow);
+                    _logger.LogWarning("Bid with ID {BidId} not found for deletion at {Time}", id, DateTime.Now);
                     return NotFound();
                 }
 
                 await _bidListService.DeleteBidAsync(id);
-                _logger.LogInformation("Deleted bid with ID {BidId} at {Time}", id, DateTime.UtcNow);
+                _logger.LogInformation("Deleted bid with ID {BidId} at {Time}", id, DateTime.Now);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while deleting the bid with ID {BidId} at {Time}", id, DateTime.UtcNow);
+                _logger.LogError(ex, "An error occurred while deleting the bid with ID {BidId} at {Time}", id, DateTime.Now);
                 return StatusCode(500, "An internal server error occurred. Please try again later.");
             }
         }

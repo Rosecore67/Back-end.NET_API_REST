@@ -1,10 +1,12 @@
 using Dot.Net.WebApi.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Models.DTOs.TradeDTOs;
 using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TradeController : ControllerBase
@@ -19,6 +21,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // GET: api/trade/list
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("list")]
         public async Task<IActionResult> GetAllTrades()
         {
@@ -68,6 +71,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // POST: api/trade/add
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("add")]
         public async Task<IActionResult> AddTrade([FromBody] TradeCreateDTO tradeCreateDto)
         {
@@ -117,6 +121,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // PUT: api/trade/update/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateTrade(int id, [FromBody] TradeUpdateDTO tradeUpdateDto)
         {
@@ -164,6 +169,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // DELETE: api/trade/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTrade(int id)
         {

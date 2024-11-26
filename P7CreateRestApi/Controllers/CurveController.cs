@@ -1,10 +1,12 @@
 using Dot.Net.WebApi.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Models.DTOs.CurveDTOs;
 using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CurveController : ControllerBase
@@ -19,6 +21,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // GET: api/curve/list
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("list")]
         public async Task<IActionResult> GetAllCurvePoints()
         {
@@ -57,6 +60,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         //POST: api/curve/add
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("add")]
         public async Task<IActionResult> AddCurvePoint([FromBody] CurvePointCreateDTO curvePointCreateDto)
         {
@@ -92,6 +96,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         //PUT: api/curve/update/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateCurvePoint(int id, [FromBody] CurvePointUpdateDTO curvePointUpdateDto)
         {
@@ -126,6 +131,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         //DELETE: api/curve/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCurvePoint(int id)
         {

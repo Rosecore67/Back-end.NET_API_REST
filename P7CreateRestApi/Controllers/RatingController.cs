@@ -1,10 +1,12 @@
 using Dot.Net.WebApi.Controllers.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Models.DTOs.RatingDTOs;
 using P7CreateRestApi.Services.Interface;
 
 namespace Dot.Net.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class RatingController : ControllerBase
@@ -19,6 +21,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // GET: api/rating/list
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("list")]
         public async Task<IActionResult> GetAllRatings()
         {
@@ -52,6 +55,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // POST: api/rating/add
+        [Authorize(Roles = "Admin,User")]
         [HttpPost("add")]
         public async Task<IActionResult> AddRating([FromBody] RatingCreateDTO ratingCreateDto)
         {
@@ -87,6 +91,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // PUT: api/rating/update/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateRating(int id, [FromBody] RatingUpdateDTO ratingUpdateDto)
         {
@@ -120,6 +125,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // DELETE: api/rating/{id}
+        [Authorize(Roles = "Admin,User")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRating(int id)
         {
