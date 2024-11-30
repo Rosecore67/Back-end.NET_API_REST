@@ -44,14 +44,14 @@ namespace Dot.Net.WebApi.Controllers
                     UserName = userCreateDto.UserName,
                     Email = userCreateDto.Email,
                     Fullname = userCreateDto.Fullname,
-                    Role = userCreateDto.Role
+                    Role = "User"
                 };
 
                 var result = await _userManager.CreateAsync(user, userCreateDto.Password);
                 if (!result.Succeeded)
                 {
                     _logger.LogWarning("Failed to register user. Errors: {Errors}", string.Join(", ", result.Errors.Select(e => e.Description)));
-                    return BadRequest(result.Errors);
+                    return BadRequest("Failed to register user");
                 }
 
                 _logger.LogInformation("User registered successfully with ID {UserId}", user.Id);

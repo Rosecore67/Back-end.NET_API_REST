@@ -64,7 +64,7 @@ namespace Dot.Net.WebApi.Controllers
                     UserName = userCreateDto.UserName,
                     Email = userCreateDto.Email,
                     Fullname = userCreateDto.Fullname,
-                    Role = userCreateDto.Role
+                    Role = "User"
                 };
 
                 var result = await _userManager.CreateAsync(user, userCreateDto.Password);
