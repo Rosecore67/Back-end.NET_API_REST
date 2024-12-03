@@ -54,6 +54,13 @@ namespace Dot.Net.WebApi.Controllers
                     return BadRequest("Failed to register user");
                 }
 
+                var roleResult = await _userManager.AddToRoleAsync(user, RoleCollection.User);
+                if (!roleResult.Succeeded)
+                {
+                    _logger.LogWarning("Failed to assign role to user. Errors: {Errors}", string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+                    return BadRequest("Failed to assign role to user");
+                }
+
                 _logger.LogInformation("User registered successfully with ID {UserId}", user.Id);
 
                 return Ok(new { user.Id, user.UserName, user.Email });

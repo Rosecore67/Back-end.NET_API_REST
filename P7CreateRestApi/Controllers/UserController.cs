@@ -2,6 +2,7 @@ using Dot.Net.WebApi.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using P7CreateRestApi.Models;
 using P7CreateRestApi.Models.DTOs.UserDTOs;
 
 
@@ -64,11 +65,25 @@ namespace Dot.Net.WebApi.Controllers
                     UserName = userCreateDto.UserName,
                     Email = userCreateDto.Email,
                     Fullname = userCreateDto.Fullname,
-                    Role = "User"
                 };
 
                 var result = await _userManager.CreateAsync(user, userCreateDto.Password);
-                if (!result.Succeeded) return BadRequest(result.Errors);
+                if (!result.Succeeded)
+                {
+                    _logger.LogWarning("Failed to createe user. Errors : {Errors}", 
+                        string.Join(",", result.Errors.Select(e => e.Description)));
+
+                    return BadRequest("Failed to create user. Please check your input");
+                }
+
+                var roleResult = await _userManager.AddToRoleAsync(user, RoleCollection.User);
+                if (!roleResult.Succeeded) 
+                {
+                    _logger.LogWarning("Failed to assign role to user. Error: {Erros}", 
+                        string.Join(",", roleResult.Errors.Select(e => e.Description)));
+
+                    return BadRequest(roleResult.Errors); 
+                }
 
                 return Ok(new { user.Id, user.UserName, user.Email });
             }

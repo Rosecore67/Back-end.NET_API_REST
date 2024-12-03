@@ -2,6 +2,7 @@
 {
     public class RoleCollection
     {
-        public static readonly string[] Roles = { "Admin", "User" };
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
 }

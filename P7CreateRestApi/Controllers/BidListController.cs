@@ -21,7 +21,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // GET: api/bidlist
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BidListDTO>>> GetAllBids()
         {
@@ -66,7 +66,7 @@ namespace Dot.Net.WebApi.Controllers
 
 
         // POST: api/bidlist/validate
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("validate")]
         public async Task<IActionResult> CreateBid([FromBody] BidListCreateDTO bidCreateDto)
         {
