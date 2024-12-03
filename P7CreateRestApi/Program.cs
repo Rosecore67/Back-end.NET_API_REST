@@ -120,52 +120,9 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await SeedData(services, configuration);
+    await SeedDataInitial.SeedData(services, configuration);
 }
 
 
 
 app.Run();
-
-
-//Méthode pour créer des roles et l'Admin
-async Task SeedData(IServiceProvider services, IConfiguration configuration)
-{
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = services.GetRequiredService<UserManager<User>>();
-
-    // Création des roles
-    var roles = new[] { "Admin", "User" };
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-        {
-            await roleManager.CreateAsync(new IdentityRole(role));
-        }
-    }
-
-    // Creation de l'utilisateur Admin
-    var adminConfig = configuration.GetSection("AdminUser");
-    var adminEmail = adminConfig["Email"];
-    var adminPassword = adminConfig["Password"];
-    var adminUserName = adminConfig["UserName"];
-    var adminFullname = adminConfig["Fullname"];
-
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-    if (adminUser == null)
-    {
-        var newAdmin = new User
-        {
-            UserName = adminUserName,
-            Email = adminEmail,
-            Fullname = adminFullname,
-            Role = "Admin"
-        };
-
-        var result = await userManager.CreateAsync(newAdmin, adminPassword);
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(newAdmin, "Admin");
-        }
-    }
-}
