@@ -1,5 +1,4 @@
 ﻿using Dot.Net.WebApi.Domain;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,7 +14,7 @@ namespace P7CreateRestApi.Utils
         {
             _configuration = configuration;
         }
-        public string GenerateJwtToken(User user)
+        public virtual string GenerateJwtToken(User user)
         {
             var claims = new[]
             {

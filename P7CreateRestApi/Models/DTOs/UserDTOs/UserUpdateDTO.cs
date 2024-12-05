@@ -13,7 +13,7 @@ namespace P7CreateRestApi.Models.DTOs.UserDTOs
         [StringLength(100, ErrorMessage = "Fullname cannot exceed 100 characters.")]
         public string Fullname { get; set; }
 
-        [StringLength(50, ErrorMessage = "Role cannot exceed 50 characters.")]
+
         public string Role { get; set; }
     }
 }

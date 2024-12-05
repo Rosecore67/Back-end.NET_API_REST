@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Models;
 using P7CreateRestApi.Models.DTOs.UserDTOs;
+using System.Security.Claims;
 
 
 namespace Dot.Net.WebApi.Controllers
@@ -95,7 +96,7 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         // PUT: api/user/update/{id}
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,User")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UserUpdateDTO userUpdateDto)
         {
@@ -103,6 +104,14 @@ namespace Dot.Net.WebApi.Controllers
 
             try
             {
+                var userIdFromClaims = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userIdFromClaims != id && !User.IsInRole("Admin"))
+                {
+                    _logger.LogWarning("Unauthorized attempt to update user with ID {UserId}", id);
+                    return Forbid("Unauthorized attempt to update user");
+                }
+
                 var existingUser = await _userManager.FindByIdAsync(id);
                 if (existingUser == null)
                 {
@@ -113,7 +122,11 @@ namespace Dot.Net.WebApi.Controllers
                 existingUser.UserName = userUpdateDto.UserName ?? existingUser.UserName;
                 existingUser.Email = userUpdateDto.Email ?? existingUser.Email;
                 existingUser.Fullname = userUpdateDto.Fullname ?? existingUser.Fullname;
-                existingUser.Role = userUpdateDto.Role ?? existingUser.Role;
+
+                if (User.IsInRole("Admin"))
+                {
+                    existingUser.Role = userUpdateDto.Role ?? existingUser.Role;
+                }
 
                 var result = await _userManager.UpdateAsync(existingUser);
                 if (!result.Succeeded)
@@ -124,7 +137,16 @@ namespace Dot.Net.WebApi.Controllers
 
                 _logger.LogInformation("Updated user with ID {UserId}", id);
 
-                return Ok(new { existingUser.Id, existingUser.UserName, existingUser.Email, existingUser.Fullname, existingUser.Role });
+                var updatedUserDto = new UserDTO
+                {
+                    Id = existingUser.Id,
+                    UserName = existingUser.UserName,
+                    Email = existingUser.Email,
+                    Fullname = existingUser.Fullname,
+                    Role = existingUser.Role
+                };
+
+                return Ok(updatedUserDto);
             }
             catch (Exception ex)
             {
