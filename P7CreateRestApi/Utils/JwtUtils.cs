@@ -6,7 +6,7 @@ using System.Text;
 
 namespace P7CreateRestApi.Utils
 {
-    public class JwtUtils
+    public class JwtUtils : IJwtUtils
     {
 
         private readonly IConfiguration _configuration;
@@ -14,7 +14,7 @@ namespace P7CreateRestApi.Utils
         {
             _configuration = configuration;
         }
-        public virtual string GenerateJwtToken(User user)
+        public string GenerateJwtToken(User user)
         {
             var claims = new[]
             {

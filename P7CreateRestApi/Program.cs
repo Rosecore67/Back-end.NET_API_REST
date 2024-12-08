@@ -100,7 +100,7 @@ builder.Services.AddScoped<ITradeRepository, TradeRepository>();
 builder.Services.AddScoped<ITradeService, TradeService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<JwtUtils>();
+builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 
 var app = builder.Build();
 

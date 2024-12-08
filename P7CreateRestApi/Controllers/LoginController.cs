@@ -13,10 +13,10 @@ namespace Dot.Net.WebApi.Controllers
     public class LoginController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        private readonly JwtUtils _jwtUtils;
+        private readonly IJwtUtils _jwtUtils;
         private readonly ILogger<LoginController> _logger;
 
-        public LoginController(UserManager<User> userManager, JwtUtils jwtUtils, ILogger<LoginController> logger)
+        public LoginController(UserManager<User> userManager, IJwtUtils jwtUtils, ILogger<LoginController> logger)
         {
             _logger = logger;
             _userManager = userManager;

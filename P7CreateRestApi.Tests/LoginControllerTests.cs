@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using P7CreateRestApi.Models.DTOs.UserDTOs;
 using P7CreateRestApi.Models;
-using P7CreateRestApi.Tests.Fakes;
+using P7CreateRestApi.Utils;
 
 namespace P7CreateRestApi.Tests
 {
@@ -15,6 +15,7 @@ namespace P7CreateRestApi.Tests
     {
         private Mock<UserManager<User>> _mockUserManager;
         private Mock<ILogger<LoginController>> _mockLogger;
+        private Mock<IJwtUtils> _jwtUtils;
         private LoginController _controller;
 
         [TestInitialize]
@@ -24,11 +25,10 @@ namespace P7CreateRestApi.Tests
             _mockUserManager = new Mock<UserManager<User>>(
                 store.Object, null, null, null, null, null, null, null, null);
             _mockLogger = new Mock<ILogger<LoginController>>();
+            _jwtUtils = new Mock<IJwtUtils>();
 
-            // Utilisation de FakeJwtUtils
-            var fakeJwtUtils = new FakeJwtUtils();
 
-            _controller = new LoginController(_mockUserManager.Object, fakeJwtUtils, _mockLogger.Object);
+            _controller = new LoginController(_mockUserManager.Object, _jwtUtils.Object, _mockLogger.Object);
         }
 
         [TestMethod]
@@ -123,6 +123,9 @@ namespace P7CreateRestApi.Tests
 
             _mockUserManager.Setup(m => m.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
+
+            _jwtUtils.Setup(j => j.GenerateJwtToken(user))
+                .Returns("fake-jwt-token");
 
             // Act
             var result = await _controller.Login(loginModel);
