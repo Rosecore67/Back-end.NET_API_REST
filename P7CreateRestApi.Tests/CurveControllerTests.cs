@@ -67,6 +67,33 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task GetAllCurvePoints_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            _mockCurvePointService.Setup(s => s.GetAllCurvePointsAsync())
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.GetAllCurvePoints();
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while retrieving all curves")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task AddCurvePoint_ShouldReturnCreatedAtAction_WhenCurvePointIsAdded()
         {
             // Arrange
@@ -100,6 +127,41 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Invalid model state")),
                     null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task AddCurvePoint_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var createDto = new CurvePointCreateDTO
+            {
+                CurveId = 1,
+                AsOfDate = DateTime.Now,
+                Term = 1.5,
+                CurvePointValue = 100.0
+            };
+
+            _mockCurvePointService.Setup(s => s.CreateCurvePointAsync(It.IsAny<CurvePoint>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.AddCurvePoint(createDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while creating a new curve")),
+                    It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
@@ -147,6 +209,45 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task UpdateCurvePoint_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var updateDto = new CurvePointUpdateDTO
+            {
+                CurveId = 1,
+                AsOfDate = DateTime.Now,
+                Term = 1.5,
+                CurvePointValue = 150.0
+            };
+            var id = 1;
+
+            _mockCurvePointService.Setup(s => s.GetCurvePointByIdAsync(id))
+                .ReturnsAsync(new CurvePoint { Id = id, CurveId = 1 });
+
+            _mockCurvePointService.Setup(s => s.UpdateCurvePointAsync(id, It.IsAny<CurvePoint>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.UpdateCurvePoint(id, updateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while updating the curve with ID")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task DeleteCurvePoint_ShouldReturnNoContent_WhenCurvePointIsDeleted()
         {
             // Arrange
@@ -181,6 +282,38 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Curve with ID")),
                     null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DeleteCurvePoint_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var id = 1;
+
+            _mockCurvePointService.Setup(s => s.GetCurvePointByIdAsync(id))
+                .ReturnsAsync(new CurvePoint { Id = id, CurveId = 1 });
+
+            _mockCurvePointService.Setup(s => s.DeleteCurvePointAsync(id))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.DeleteCurvePoint(id);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while deleting the curve with ID")),
+                    It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }

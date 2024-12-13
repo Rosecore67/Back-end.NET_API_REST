@@ -43,8 +43,8 @@ namespace P7CreateRestApi.Tests
             var result = await _controller.GetAllTrades();
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-            var okResult = result as OkObjectResult;
+            Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
+            var okResult = result.Result as OkObjectResult;
             var tradeList = okResult.Value as List<TradeDTO>;
             Assert.AreEqual(2, tradeList.Count);
 
@@ -68,7 +68,7 @@ namespace P7CreateRestApi.Tests
             var result = await _controller.GetAllTrades();
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
             _mockLogger.Verify(
                 x => x.Log(
                     LogLevel.Warning,
@@ -76,6 +76,33 @@ namespace P7CreateRestApi.Tests
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("No trades found")),
                     null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task GetAllTrades_ShouldReturnInternalServerError_OnException()
+        {
+            // Arrange
+            _mockTradeService.Setup(s => s.GetAllTradesAsync())
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.GetAllTrades();
+
+            // Assert
+            Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));
+            var objectResult = result.Result as ObjectResult;
+
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while retrieving all trades")),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
                 Times.Once);
         }
 
@@ -121,6 +148,40 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Invalid model state for AddTrade request")),
                     null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task AddTrade_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var tradeCreateDto = new TradeCreateDTO
+            {
+                Account = "Account1",
+                AccountType = "Type1",
+                BuyQuantity = 100
+            };
+
+            _mockTradeService.Setup(s => s.CreateTradeAsync(It.IsAny<Trade>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.AddTrade(tradeCreateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while creating a new trade")),
+                    It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
@@ -176,6 +237,41 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task UpdateTrade_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            int tradeId = 1;
+            var tradeUpdateDto = new TradeUpdateDTO
+            {
+                Account = "UpdatedAccount",
+                AccountType = "UpdatedType",
+                BuyQuantity = 200
+            };
+
+            _mockTradeService.Setup(s => s.GetTradeByIdAsync(tradeId))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.UpdateTrade(tradeId, tradeUpdateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains($"An error occurred while updating the trade with ID {tradeId}")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task DeleteTrade_ShouldReturnNoContent_WhenTradeIsDeleted()
         {
             // Arrange
@@ -218,6 +314,35 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains($"Trade with ID {tradeId} not found for deletion")),
                     null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DeleteTrade_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            int tradeId = 1;
+
+            _mockTradeService.Setup(s => s.GetTradeByIdAsync(tradeId))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.DeleteTrade(tradeId);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains($"An error occurred while deleting the trade with ID {tradeId}")),
+                    It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }

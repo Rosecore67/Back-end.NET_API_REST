@@ -101,6 +101,77 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task Register_ShouldReturnBadRequest_WhenRoleAssignmentFails()
+        {
+            // Arrange
+            var userCreateDto = new UserCreateDTO
+            {
+                UserName = "testuser",
+                Email = "testuser@example.com",
+                Password = "Password@1234",
+                Fullname = "Test User"
+            };
+
+            _mockUserManager.Setup(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
+            _mockUserManager.Setup(m => m.AddToRoleAsync(It.IsAny<User>(), RoleCollection.User))
+                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Role assignment failed" }));
+
+            // Act
+            var result = await _controller.Register(userCreateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            var badRequestResult = result as BadRequestObjectResult;
+
+            Assert.AreEqual("Failed to assign role to user", badRequestResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Failed to assign role to user")),
+                    null,
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task Register_ShouldReturnInternalServerError_OnException()
+        {
+            // Arrange
+            var userCreateDto = new UserCreateDTO
+            {
+                UserName = "testuser",
+                Email = "testuser@example.com",
+                Password = "Password@1234",
+                Fullname = "Test User"
+            };
+
+            _mockUserManager.Setup(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.Register(userCreateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while registering a new user")),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task Login_ShouldReturnOk_WhenCredentialsAreValid()
         {
             // Arrange
@@ -181,6 +252,39 @@ namespace P7CreateRestApi.Tests
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+        }
+
+        [TestMethod]
+        public async Task Login_ShouldReturnInternalServerError_OnException()
+        {
+            // Arrange
+            var loginModel = new LoginModel
+            {
+                Username = "testuser",
+                Password = "Password@1234"
+            };
+
+            _mockUserManager.Setup(m => m.FindByNameAsync(It.IsAny<string>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.Login(loginModel);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while logging in a user")),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
         }
     }
 }

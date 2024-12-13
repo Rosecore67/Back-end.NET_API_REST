@@ -80,7 +80,7 @@ namespace Dot.Net.WebApi.Controllers
                 var roleResult = await _userManager.AddToRoleAsync(user, RoleCollection.User);
                 if (!roleResult.Succeeded) 
                 {
-                    _logger.LogWarning("Failed to assign role to user. Error: {Erros}", 
+                    _logger.LogWarning("Failed to assign role to user. Error: {Errors}", 
                         string.Join(",", roleResult.Errors.Select(e => e.Description)));
 
                     return BadRequest(roleResult.Errors); 

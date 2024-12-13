@@ -68,6 +68,34 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task GetAllBids_ShouldReturnInternalError_OnException()
+        {
+            //Arrange
+            var message = "Simulated exception";
+
+            _mockBidListService.Setup(s => s.GetAllBidsAsync()).ThrowsAsync(new Exception(message));
+
+            //Act
+            var result = await _controller.GetAllBids();
+
+            //Assert
+            Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));
+            var objectResult = result.Result as ObjectResult;
+
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while retrieving all bids")),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task CreateBid_ValidModel_ShouldReturnCreatedResult()
         {
             // Arrange
@@ -107,6 +135,40 @@ namespace P7CreateRestApi.Tests
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Invalid model state")),
                     null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task CreateBid_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var bidCreateDto = new BidListCreateDTO
+            {
+                Account = "TestAccount",
+                BidType = "TestType",
+                BidQuantity = 10
+            };
+
+            _mockBidListService.Setup(s => s.CreateBidAsync(It.IsAny<BidList>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.CreateBid(bidCreateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while creating a new bid")),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
                 Times.Once);
         }
 
@@ -176,6 +238,58 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task UpdateBid_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            int bidId = 1;
+            var bidUpdateDto = new BidListUpdateDTO
+            {
+                Account = "UpdatedAccount",
+                BidType = "UpdatedType",
+                BidQuantity = 20,
+                AskQuantity = 30,
+                Bid = 100.5,
+                Ask = 101.5
+            };
+
+            var existingBid = new BidList
+            {
+                BidListId = bidId,
+                Account = "OriginalAccount",
+                BidType = "OriginalType",
+                BidQuantity = 10,
+                AskQuantity = 20,
+                Bid = 99.5,
+                Ask = 100.5
+            };
+            _mockBidListService.Setup(s => s.GetBidByIdAsync(bidId))
+                .ReturnsAsync(existingBid);
+
+            _mockBidListService.Setup(s => s.UpdateBidAsync(bidId, It.IsAny<BidList>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.UpdateBid(bidId, bidUpdateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+
+            Assert.AreEqual(500, objectResult.StatusCode);
+
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while updating the bid with ID")),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task DeleteBid_BidExists_ShouldReturnNoContent()
         {
             // Arrange
@@ -211,6 +325,39 @@ namespace P7CreateRestApi.Tests
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Bid with ID")),
                     null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DeleteBid_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            int bidId = 1;
+
+            var existingBid = new BidList { BidListId = bidId, Account = "TestAccount" };
+            _mockBidListService.Setup(s => s.GetBidByIdAsync(bidId))
+                .ReturnsAsync(existingBid);
+
+            _mockBidListService.Setup(s => s.DeleteBidAsync(bidId))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.DeleteBid(bidId);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while deleting the bid with ID")),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
                 Times.Once);
         }
     }

@@ -23,7 +23,7 @@ namespace Dot.Net.WebApi.Controllers
         // GET: api/trade/list
         [Authorize(Roles = "Admin,User")]
         [HttpGet("list")]
-        public async Task<IActionResult> GetAllTrades()
+        public async Task<ActionResult<IEnumerable<TradeDTO>>> GetAllTrades()
         {
             _logger.LogInformation("Received request to GET all trades");
 

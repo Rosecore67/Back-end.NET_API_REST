@@ -74,6 +74,33 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task GetAllRuleNames_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            _mockRuleNameService.Setup(s => s.GetAllRuleNamesAsync())
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.GetAllRuleNames();
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while retrieving all rule names")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task AddRuleName_ShouldReturnCreatedAtAction_WhenRuleNameIsAdded()
         {
             // Arrange
@@ -115,6 +142,43 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Invalid model state for AddRuleName request")),
                     null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task AddRuleName_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var createDto = new RuleNameCreateDTO
+            {
+                Name = "New Rule",
+                Description = "Description",
+                Json = "{}",
+                Template = "Template",
+                SqlStr = "SQL String",
+                SqlPart = "SQL Part"
+            };
+
+            _mockRuleNameService.Setup(s => s.CreateRuleNameAsync(It.IsAny<RuleName>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.AddRuleName(createDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while creating a new rule name")),
+                    It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
@@ -170,6 +234,58 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task UpdateRuleName_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var ruleNameId = 1;
+            var updateDto = new RuleNameUpdateDTO
+            {
+                Name = "Updated Rule",
+                Description = "Updated Description",
+                Json = "{}",
+                Template = "Updated Template",
+                SqlStr = "Updated SQL String",
+                SqlPart = "Updated SQL Part"
+            };
+
+            var existingRuleName = new RuleName
+            {
+                Id = ruleNameId,
+                Name = "Old Rule",
+                Description = "Old Description",
+                Json = "{}",
+                Template = "Old Template",
+                SqlStr = "Old SQL String",
+                SqlPart = "Old SQL Part"
+            };
+
+            _mockRuleNameService.Setup(s => s.GetRuleNameByIdAsync(ruleNameId))
+                .ReturnsAsync(existingRuleName);
+
+            _mockRuleNameService.Setup(s => s.UpdateRuleNameAsync(ruleNameId, It.IsAny<RuleName>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.UpdateRuleName(ruleNameId, updateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while updating the rule name with ID")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task DeleteRuleName_ShouldReturnNoContent_WhenRuleNameIsDeleted()
         {
             // Arrange
@@ -212,6 +328,49 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Rule name with ID")),
                     null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DeleteRuleName_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var ruleNameId = 1;
+
+            var existingRuleName = new RuleName
+            {
+                Id = ruleNameId,
+                Name = "Rule to Delete",
+                Description = "Rule Description",
+                Json = "{}",
+                Template = "Rule Template",
+                SqlStr = "SQL String",
+                SqlPart = "SQL Part"
+            };
+
+            _mockRuleNameService.Setup(s => s.GetRuleNameByIdAsync(ruleNameId))
+                .ReturnsAsync(existingRuleName);
+
+            _mockRuleNameService.Setup(s => s.DeleteRuleNameAsync(ruleNameId))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.DeleteRuleName(ruleNameId);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while deleting the rule name with ID")),
+                    It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }

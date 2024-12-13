@@ -75,6 +75,33 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task GetAllRatings_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            _mockRatingService.Setup(s => s.GetAllRatingsAsync())
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.GetAllRatings();
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while retrieving ratings")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task AddRating_ShouldReturnCreatedAtAction_WhenRatingIsAdded()
         {
             // Arrange
@@ -116,6 +143,41 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Invalid model state for AddRating request")),
                     null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task AddRating_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var createDto = new RatingCreateDTO
+            {
+                MoodysRating = "A1",
+                SandPRating = "AA",
+                FitchRating = "A+",
+                OrderNumber = 1
+            };
+
+            _mockRatingService.Setup(s => s.CreateRatingAsync(It.IsAny<Rating>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.AddRating(createDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while creating a new rating")),
+                    It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
@@ -171,6 +233,45 @@ namespace P7CreateRestApi.Tests
         }
 
         [TestMethod]
+        public async Task UpdateRating_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var id = 1;
+            var updateDto = new RatingUpdateDTO
+            {
+                MoodysRating = "A2",
+                SandPRating = "AAA",
+                FitchRating = "AA+",
+                OrderNumber = 2
+            };
+
+            _mockRatingService.Setup(s => s.GetRatingByIdAsync(id))
+                .ReturnsAsync(new Rating { Id = id });
+
+            _mockRatingService.Setup(s => s.UpdateRatingAsync(id, It.IsAny<Rating>()))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.UpdateRating(id, updateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while updating the rating with ID")),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task DeleteRating_ShouldReturnNoContent_WhenRatingIsDeleted()
         {
             // Arrange
@@ -213,6 +314,38 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Rating with ID")),
                     null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DeleteRating_ShouldReturnInternalError_OnException()
+        {
+            // Arrange
+            var id = 1;
+
+            _mockRatingService.Setup(s => s.GetRatingByIdAsync(id))
+                .ReturnsAsync(new Rating { Id = id });
+
+            _mockRatingService.Setup(s => s.DeleteRatingAsync(id))
+                .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.DeleteRating(id);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual(500, objectResult.StatusCode);
+            Assert.AreEqual("An internal server error occurred. Please try again later.", objectResult.Value);
+
+            _mockLogger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("An error occurred while deleting the rating with ID")),
+                    It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
