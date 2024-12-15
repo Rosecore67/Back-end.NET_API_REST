@@ -279,21 +279,19 @@ namespace P7CreateRestApi.Tests
                 Role = "Admin"
             };
 
-            // Configuration du mock pour FindByIdAsync
             _mockUserManager.Setup(m => m.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((User)null);
 
-            // utilisateur simulé avec des claims
             var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, "2"), 
-                    new Claim(ClaimTypes.Role, "Admin")        
+                    new Claim(ClaimTypes.NameIdentifier, "2"),
+                    new Claim(ClaimTypes.Role, "Admin")
                 };
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "mock"));
-                _controller.ControllerContext = new ControllerContext
-                {
-                    HttpContext = new DefaultHttpContext { User = user }
-                };
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = user }
+            };
 
             // Act
             var result = await _controller.Update(userId, userUpdateDto);
@@ -431,6 +429,62 @@ namespace P7CreateRestApi.Tests
                     It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
+        }
+
+        [TestMethod]
+        public async Task Update_ShouldKeepExistingValues_WhenDtoHasNullValues()
+        {
+            // Arrange
+            var userId = "1";
+            var userUpdateDto = new UserUpdateDTO
+            {
+                UserName = null,
+                Email = null,
+                Fullname = null,
+                Role = null
+            };
+
+            var existingUser = new User
+            {
+                Id = userId,
+                UserName = "OldUser",
+                Email = "olduser@example.com",
+                Fullname = "Old User",
+                Role = "Admin"
+            };
+
+            _mockUserManager.Setup(m => m.FindByIdAsync(userId)).ReturnsAsync(existingUser);
+
+            _mockUserManager.Setup(m => m.UpdateAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success);
+
+            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                new Claim(ClaimTypes.Role, "Admin")
+            }, "mock"));
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = claimsPrincipal }
+            };
+
+            // Act
+            var result = await _controller.Update(userId, userUpdateDto);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            var okResult = result as OkObjectResult;
+
+            Assert.IsNotNull(okResult.Value);
+            var updatedUser = okResult.Value as UserDTO;
+
+            Assert.IsNotNull(updatedUser);
+            Assert.AreEqual(existingUser.UserName, updatedUser.UserName);
+            Assert.AreEqual(existingUser.Email, updatedUser.Email);
+            Assert.AreEqual(existingUser.Fullname, updatedUser.Fullname);
+            Assert.AreEqual(existingUser.Role, updatedUser.Role);
+
+            _mockUserManager.Verify(m => m.UpdateAsync(It.IsAny<User>()), Times.Once);
         }
 
         [TestMethod]

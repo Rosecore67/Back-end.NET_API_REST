@@ -5,13 +5,13 @@ namespace P7CreateRestApi.Models.DTOs.UserDTOs
     public class UserUpdateDTO
     {
         [StringLength(50, ErrorMessage = "UserName cannot exceed 50 characters.")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [EmailAddress(ErrorMessage = "Invalid email address format.")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [StringLength(100, ErrorMessage = "Fullname cannot exceed 100 characters.")]
-        public string Fullname { get; set; }
+        public string? Fullname { get; set; }
 
 
         public string Role { get; set; }
