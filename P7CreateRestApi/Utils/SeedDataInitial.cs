@@ -5,13 +5,11 @@ namespace P7CreateRestApi.Utils
 {
     public class SeedDataInitial
     {
-        //Méthode pour créer des roles et l'Admin
         public static async Task SeedData(IServiceProvider services, IConfiguration configuration)
         {
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = services.GetRequiredService<UserManager<User>>();
 
-            // Création des roles
             foreach (var role in Models.RoleCollection.Roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -20,7 +18,6 @@ namespace P7CreateRestApi.Utils
                 }
             }
 
-            // Creation de l'utilisateur Admin
             var adminConfig = configuration.GetSection("AdminUser");
             var adminEmail = adminConfig["Email"];
             var adminPassword = adminConfig["Password"];

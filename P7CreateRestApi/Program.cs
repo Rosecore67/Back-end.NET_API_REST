@@ -1,22 +1,21 @@
 using Dot.Net.WebApi.Data;
-using Microsoft.EntityFrameworkCore;
-using P7CreateRestApi.Repositories.Interface;
-using P7CreateRestApi.Repositories;
-using P7CreateRestApi.Services.Interface;
-using P7CreateRestApi.Services;
-using Dot.Net.WebApi.Repositories;
 using Dot.Net.WebApi.Domain;
+using Dot.Net.WebApi.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
+using P7CreateRestApi.Repositories;
+using P7CreateRestApi.Repositories.Interface;
+using P7CreateRestApi.Services;
+using P7CreateRestApi.Services.Interface;
 using P7CreateRestApi.Utils;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,7 +24,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "P7CreateRestApi", Version = "v1" });
 
-    // Ajout de la configuration JWT à Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -57,7 +55,6 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<LocalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configuration d'Identity avec des options de sécurité pour les mots de passe
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -68,7 +65,6 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 .AddEntityFrameworkStores<LocalDbContext>()
 .AddDefaultTokenProviders();
 
-// Configuration de l'authentification JWT
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -116,7 +112,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-//Création des roles et de l'Admin
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
