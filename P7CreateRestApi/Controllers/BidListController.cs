@@ -20,9 +20,9 @@ namespace Dot.Net.WebApi.Controllers
             _logger = logger;
         }
 
-        // GET: api/bidlist
+        // GET: api/bidlist/list
         [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<ActionResult<IEnumerable<BidListDTO>>> GetAllBids()
         {
             _logger.LogInformation("Received request to GET all bids at {Time}", DateTime.Now);
@@ -65,9 +65,9 @@ namespace Dot.Net.WebApi.Controllers
         }
 
 
-        // POST: api/bidlist/validate
+        // POST: api/bidlist/add
         [Authorize(Roles = "Admin")]
-        [HttpPost("validate")]
+        [HttpPost("add")]
         public async Task<IActionResult> CreateBid([FromBody] BidListCreateDTO bidCreateDto)
         {
             _logger.LogInformation("Received request to CREATE a new bid at {Time}", DateTime.Now);
@@ -153,9 +153,9 @@ namespace Dot.Net.WebApi.Controllers
             }
         }
 
-        // DELETE: api/bidlist/{id}
+        // DELETE: api/bidlist/delete/{id}
         [Authorize(Roles = "Admin,User")]
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteBid(int id)
         {
             _logger.LogInformation("Received request to DELETE bid with ID {BidId} at {Time}", id, DateTime.Now);
